@@ -11,6 +11,7 @@ Author URI: https://bitbucket.org/valudigital/valu-search
 
 const ROOT_TAG = '__ROOT';
 
+
 add_action('wp_head', function() {
 
     global $post;
@@ -25,13 +26,20 @@ add_action('wp_head', function() {
 
     if ( $show ) {
         // TODO check if manually hidden using ACF(?) field
-        // if ( get_post_meta( $post->ID, 'show_in_search' ) === false ) { 
+        // if ( get_post_meta( $post->ID, 'show_in_search' ) === false ) {
         //     $show = false;
         // }
     }
 
-    $details = get_blog_details();
-    $blog_path = trim(  $details->path, '/' );
+    if ( is_multisite() ) {
+        $details = \get_blog_details();
+        $blogname = $details->blogname;
+        $blog_path = trim(  $details->path, '/' );
+    } else {
+        $blogname = 'fixme'; // XXX fixme
+        $blog_path = '/';
+    }
+
 
     if ( ! $blog_path ) {
         $blog_path = ROOT_TAG;
@@ -42,7 +50,7 @@ add_action('wp_head', function() {
         'html',
         'wordpress',
         'wp_post_type/' . $post->post_type,
-        'wp_blog_name/' . sanitize_title( $details->blogname ),
+        'wp_blog_name/' . sanitize_title( $blogname ),
         'wp_blog_path/' . $blog_path,
         $public ? 'public' : 'private',
     ];
@@ -53,7 +61,7 @@ add_action('wp_head', function() {
         // Theme may override the selector if needed
         'contentSelector' => apply_filters( 'valu_search_content_selector', '.content-page, .entry-content' ),
         'title' => $post->post_title,
-        'siteName' => $details->blogname,
+        'siteName' => $blogname,
         'language' => substr( get_locale(), 0, 2 ),
         'created' => get_the_date( 'c', $post ),
         'modified' => get_the_modified_date( 'c', $post ),
