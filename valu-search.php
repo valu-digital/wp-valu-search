@@ -58,8 +58,7 @@ add_action('wp_head', function() {
 
     $meta = [
         'showInSearch' => $show,
-        // Theme may override the selector if needed
-        'contentSelector' => apply_filters( 'valu_search_content_selector', '.content-page, .entry-content' ),
+        'contentSelector' => apply_filters( 'valu_search_content_selector', '.main' ),
         'title' => $post->post_title,
         'siteName' => $blogname,
         'language' => substr( get_locale(), 0, 2 ),
