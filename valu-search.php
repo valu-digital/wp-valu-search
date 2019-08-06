@@ -36,8 +36,10 @@ add_action('wp_head', function() {
         $blogname = $details->blogname;
         $blog_path = trim(  $details->path, '/' );
     } else {
-        $blogname = 'fixme'; // XXX fixme
-        $blog_path = '/';
+        global $blog_id;
+        $current_blog_details = get_blog_details( array( 'blog_id' => $blog_id ) );
+        $blogname = $current_blog_details->blogname;
+        $blog_path = trim(  $current_blog_details->path, '/' );
     }
 
 
