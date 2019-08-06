@@ -88,7 +88,7 @@ function handle_post_change( $post ) {
             array(
 				'headers' => [
 					'Content-type'        => 'application/json',
-					'X-Valu-Search-Api-Key' => VALU_SEARCH_API_Key,     // ?
+					'X-Valu-Search-Api-Key' => VALU_SEARCH_API_KEY,     // ?
 				],
 				'method'  => 'POST',
 				'body'    => $json,
@@ -110,7 +110,7 @@ function handle_post_change( $post ) {
             array(
 				'headers' => [
 					'Content-type'        => 'application/json',
-					'X-Valu-Search-Api-Key' => VALU_SEARCH_API_Key,     // ?
+					'X-Valu-Search-Api-Key' => VALU_SEARCH_API_KEY,     // ?
 				],
 				'method'  => 'DELETE',
 				'body'    => $json,
