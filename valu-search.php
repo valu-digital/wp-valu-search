@@ -37,8 +37,8 @@ add_action('wp_head', function() {
         $blogname = $details->blogname;
         $blog_path = trim(  $details->path, '/' );
     } else {
-        $blogname = 'fixme'; // XXX fixme
-        $blog_path = '/';
+		$blogname  = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://{$_SERVER['HTTP_HOST']}";
+		$blog_path = $_SERVER['REQUEST_URI'];
     }
 
 
@@ -110,7 +110,7 @@ function handle_post_change( $post ) {
 		$blog_path = trim( $details->path, '/' );
 	} else {
 		$blogname  = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://{$_SERVER['HTTP_HOST']}";
-		$blog_path            = $_SERVER['REQUEST_URI'];
+		$blog_path = $_SERVER['REQUEST_URI'];
 	}
 
 	if ( ! $blog_path ) {
