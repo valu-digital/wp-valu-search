@@ -147,7 +147,7 @@ function handle_post_change( $post ) {
 	// Allow any custom modifications
 	$meta = apply_filters( 'valu_search_meta', $meta, $post );
 
-	$json = wp_json_encode( $meta );
+	$json = wp_json_encode(['meta' => $meta]) ;
 	echo "<script type='text/json' id='valu-search'>$json</script>";
 
 	if ( 'publish' === get_post_status( get_the_ID() ) ) {
