@@ -1,5 +1,7 @@
 <?php
+
 namespace Valu\Search;
+
 /*
 Plugin Name: Valu Search
 Version: 0.1.0
@@ -16,112 +18,112 @@ add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10
 
 function handle_post_change( $post ) {
 
-    if ( ! $post ) {
-        return;
-    }
+	global $post;
 
-    $public = $post->post_status === 'publish';
+	if ( ! $post ) {
+		return;
+	}
 
-    $show = true;
+	$public = 'publish' === $post->post_status;
 
-    if ( $show ) {
-        // TODO check if manually hidden using ACF(?) field
-        // if ( get_post_meta( $post->ID, 'show_in_search' ) === false ) {
-        //     $show = false;
-        // }
-    }
+	$show = true;
 
-    if ( is_multisite() ) {
-        $details = \get_blog_details();
-        $blogname = $details->blogname;
-        $blog_path = trim(  $details->path, '/' );
-    } else {
-        global $blog_id;
-        $current_blog_details = get_blog_details( array( 'blog_id' => $blog_id ) );
-        $blogname = $current_blog_details->blogname;
-        $blog_path = trim(  $current_blog_details->path, '/' );
-    }
+	if ( $show ) {
+		// TODO check if manually hidden using ACF(?) field
+		// if ( get_post_meta( $post->ID, 'show_in_search' ) === false ) {
+		//     $show = false;
+		// }
+	}
 
-    if ( ! $blog_path ) {
-        $blog_path = ROOT_TAG;
-    }
+	if ( is_multisite() ) {
+		$details   = \get_blog_details();
+		$blogname  = $details->blogname;
+		$blog_path = trim( $details->path, '/' );
+	} else {
+		$blogname  = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://{$_SERVER['HTTP_HOST']}";
+		$blog_path            = $_SERVER['REQUEST_URI'];
+	}
 
-    // Default tags for elasticsearch
-    $tags = [
-        'html',
-        'wordpress',
-        'wp_post_type/' . $post->post_type,
-        'wp_blog_name/' . sanitize_title( $blogname ),
-        'wp_blog_path/' . $blog_path,
-        $public ? 'public' : 'private',
-    ];
+	if ( ! $blog_path ) {
+		$blog_path = ROOT_TAG;
+	}
+
+	// Default tags for elasticsearch
+	$tags = [
+		'html',
+		'wordpress',
+		'wp_post_type/' . $post->post_type,
+		'wp_blog_name/' . sanitize_title( $blogname ),
+		'wp_blog_path/' . $blog_path,
+		$public ? 'public' : 'private',
+	];
 
 
-    $meta = [
-        'showInSearch' => $show,
-        'contentSelector' => apply_filters( 'valu_search_content_selector', '.main' ),
-        'title' => $post->post_title,
-        'siteName' => $blogname,
-        'language' => substr( get_locale(), 0, 2 ),
-        'created' => get_the_date( 'c', $post ),
-        'modified' => get_the_modified_date( 'c', $post ),
-        'tags' => $tags,
-    ];
+	$meta = [
+		'showInSearch'    => $show,
+		'contentSelector' => apply_filters( 'valu_search_content_selector', '.main' ),
+		'title'           => $post->post_title,
+		'siteName'        => $blogname,
+		'language'        => substr( get_locale(), 0, 2 ),
+		'created'         => get_the_date( 'c', $post ),
+		'modified'        => get_the_modified_date( 'c', $post ),
+		'tags'            => $tags,
+	];
 
-    // Use the post language if using polylang instead of the blog locale.
-    if ( function_exists( 'pll_get_post_language' ) ) {
-        $meta[ 'language' ] = pll_get_post_language( $post->ID, 'slug' );
-    }
+	// Use the post language if using polylang instead of the blog locale.
+	if ( function_exists( 'pll_get_post_language' ) ) {
+		$meta['language'] = pll_get_post_language( $post->ID, 'slug' );
+	}
 
-    // Allow any custom modifications
-    $meta = apply_filters( 'valu_search_meta', $meta, $post );
+	// Allow any custom modifications
+	$meta = apply_filters( 'valu_search_meta', $meta, $post );
 
-    $json = wp_json_encode( $meta );
-    echo "<script type='text/json' id='valu-search'>$json</script>";
+	$json = wp_json_encode( $meta );
+	echo "<script type='text/json' id='valu-search'>$json</script>";
 
-    if ( 'publish' === get_post_status( get_the_ID() ) ){
+	if ( 'publish' === get_post_status( get_the_ID() ) ) {
 
-        $url = VALU_SEARCH_ENDPOINT . "/trigger-scrape-site";
+		$url = VALU_SEARCH_ENDPOINT . "/trigger-scrape-site";
 
-        $response = wp_remote_request(
-            $url,
-            array(
+		$response = wp_remote_request(
+			$url,
+			array(
 				'headers' => [
-					'Content-type'        => 'application/json',
+					'Content-type'          => 'application/json',
 					'X-Valu-Search-Api-Key' => VALU_SEARCH_API_KEY,     // ?
 				],
 				'method'  => 'POST',
 				'body'    => $json,
-            )
-        );
+			)
+		);
 
-        if ( 200 === wp_remote_retrieve_response_code( $response ) ){
-            echo "<script type='text/json' id='valu-search'>UPDATE TOIMI</script>";
-        } else {
-            echo "<script type='text/json' id='valu-search'>UPDATE EITOIMI</script>";
-        }
+		if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+			echo "<script type='text/json' id='valu-search'>UPDATE TOIMI</script>";
+		} else {
+			echo "<script type='text/json' id='valu-search'>UPDATE EITOIMI</script>";
+		}
 
-    } else {
+	} else {
 
-        $url = VALU_SEARCH_ENDPOINT . "/trigger-delete-index";
+		$url = VALU_SEARCH_ENDPOINT . "/trigger-delete-index";
 
-        $response = wp_remote_request(
-            $url,
-            array(
+		$response = wp_remote_request(
+			$url,
+			array(
 				'headers' => [
-					'Content-type'        => 'application/json',
+					'Content-type'          => 'application/json',
 					'X-Valu-Search-Api-Key' => VALU_SEARCH_API_KEY,     // ?
 				],
 				'method'  => 'DELETE',
 				'body'    => $json,
-            )
-        );
+			)
+		);
 
-        if ( 200 === wp_remote_retrieve_response_code( $response ) ){
-            echo "<script type='text/json' id='valu-search'>DELETE TOIMI</script>";
-        } else {
-            echo "<script type='text/json' id='valu-search'>DELETE EITOIMI</script>";
-        }
+		if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+			echo "<script type='text/json' id='valu-search'>DELETE TOIMI</script>";
+		} else {
+			echo "<script type='text/json' id='valu-search'>DELETE EITOIMI</script>";
+		}
 
-    }
+	}
 }
