@@ -79,4 +79,49 @@ function handle_post_change( $post ) {
     $json = wp_json_encode( $meta );
     echo "<script type='text/json' id='valu-search'>$json</script>";
 
-});
+    if ( 'publish' === get_post_status( get_the_ID() ) ){
+
+        $url = VALU_SEARCH_ENDPOINT . "/trigger-scrape-site";
+
+        $response = wp_remote_request(
+            $url,
+            array(
+				'headers' => [
+					'Content-type'        => 'application/json',
+					'X-Valu-Search-Api-Key' => VALU_SEARCH_API_Key,     // ?
+				],
+				'method'  => 'POST',
+				'body'    => $json,
+            )
+        );
+
+        if ( 200 === wp_remote_retrieve_response_code( $response ) ){
+            echo "<script type='text/json' id='valu-search'>UPDATE TOIMI</script>";
+        } else {
+            echo "<script type='text/json' id='valu-search'>UPDATE EITOIMI</script>";
+        }
+
+    } else {
+
+        $url = VALU_SEARCH_ENDPOINT . "/trigger-delete-index";
+
+        $response = wp_remote_request(
+            $url,
+            array(
+				'headers' => [
+					'Content-type'        => 'application/json',
+					'X-Valu-Search-Api-Key' => VALU_SEARCH_API_Key,     // ?
+				],
+				'method'  => 'DELETE',
+				'body'    => $json,
+            )
+        );
+
+        if ( 200 === wp_remote_retrieve_response_code( $response ) ){
+            echo "<script type='text/json' id='valu-search'>DELETE TOIMI</script>";
+        } else {
+            echo "<script type='text/json' id='valu-search'>DELETE EITOIMI</script>";
+        }
+
+    }
+}
