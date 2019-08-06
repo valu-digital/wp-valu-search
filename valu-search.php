@@ -11,10 +11,10 @@ Author URI: https://bitbucket.org/valudigital/valu-search
 
 const ROOT_TAG = '__ROOT';
 
+add_action( 'save_post', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
+add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
 
-add_action('wp_head', function() {
-
-    global $post;
+function handle_post_change( $post ) {
 
     if ( ! $post ) {
         return;
@@ -41,7 +41,6 @@ add_action('wp_head', function() {
         $blogname = $current_blog_details->blogname;
         $blog_path = trim(  $current_blog_details->path, '/' );
     }
-
 
     if ( ! $blog_path ) {
         $blog_path = ROOT_TAG;
