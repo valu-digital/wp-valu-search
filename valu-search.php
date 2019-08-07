@@ -16,7 +16,7 @@ const ROOT_TAG = '__ROOT';
 //placeholder
 const VALU_SEARCH_ENDPOINT = 'http://localhost:3000';
 
-add_action('wp_head', function() {
+add_action( 'wp_head', function () {
 
 	global $post;
 
@@ -36,11 +36,11 @@ add_action('wp_head', function() {
 	}
 
 	if ( is_multisite() ) {
-		$details = \get_blog_details();
-		$blogname = $details->blogname;
-		$blog_path = trim(  $details->path, '/' );
+		$details   = \get_blog_details();
+		$blogname  = $details->blogname;
+		$blog_path = trim( $details->path, '/' );
 	} else {
-		$blogname  = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://{$_SERVER['HTTP_HOST']}";
+		$blogname  = ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ? "https" : "http" ) . "://{$_SERVER['HTTP_HOST']}";
 		$blog_path = $_SERVER['REQUEST_URI'];
 	}
 
@@ -61,19 +61,19 @@ add_action('wp_head', function() {
 
 
 	$meta = [
-		'showInSearch' => $show,
+		'showInSearch'    => $show,
 		'contentSelector' => apply_filters( 'valu_search_content_selector', '.main' ),
-		'title' => $post->post_title,
-		'siteName' => $blogname,
-		'language' => substr( get_locale(), 0, 2 ),
-		'created' => get_the_date( 'c', $post ),
-		'modified' => get_the_modified_date( 'c', $post ),
-		'tags' => $tags,
+		'title'           => $post->post_title,
+		'siteName'        => $blogname,
+		'language'        => substr( get_locale(), 0, 2 ),
+		'created'         => get_the_date( 'c', $post ),
+		'modified'        => get_the_modified_date( 'c', $post ),
+		'tags'            => $tags,
 	];
 
 	// Use the post language if using polylang instead of the blog locale.
 	if ( function_exists( 'pll_get_post_language' ) ) {
-		$meta[ 'language' ] = pll_get_post_language( $post->ID, 'slug' );
+		$meta['language'] = pll_get_post_language( $post->ID, 'slug' );
 	}
 
 	// Allow any custom modifications
@@ -82,7 +82,7 @@ add_action('wp_head', function() {
 	$json = wp_json_encode( $meta );
 	echo "<script type='text/json' id='valu-search'>$json</script>";
 
-});
+} );
 
 add_action( 'save_post', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
 add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
@@ -95,16 +95,17 @@ function handle_post_change( $post ) {
 		return;
 	}
 	$slug = get_search_customer_name( $post );
+	$url  = ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http' ) . "://{$_SERVER['HTTP_HOST']}" . '/' . $post->post_name;
 
-	$json = wp_json_encode( [ 'url' => get_permalink(), 'index' => $slug ] );
+	$json = wp_json_encode( [ 'url' => $url, 'index' => $slug ] );
 
 	if ( 'publish' === get_post_status( get_the_ID() ) ) {
-		$url = VALU_SEARCH_ENDPOINT . "/trigger-scrape-site";
+		$url      = VALU_SEARCH_ENDPOINT . "/trigger-scrape-site";
 		$response = wp_remote_request(
 			$url,
 			array(
 				'headers' => [
-					'Content-type'          => 'application/json',
+					'Content-type' => 'application/json',
 					//'X-Valu-Search-Api-Key' => VALU_SEARCH_API_KEY,     // ?
 				],
 				'method'  => 'POST',
@@ -117,12 +118,12 @@ function handle_post_change( $post ) {
 			echo "<script type='text/json' id='valu-search'>UPDATE EITOIMI</script>";
 		}
 	} else {
-		$url = VALU_SEARCH_ENDPOINT . "/trigger-delete-index";
+		$url      = VALU_SEARCH_ENDPOINT . "/trigger-delete-index";
 		$response = wp_remote_request(
 			$url,
 			array(
 				'headers' => [
-					'Content-type'          => 'application/json',
+					'Content-type' => 'application/json',
 					//'X-Valu-Search-Api-Key' => VALU_SEARCH_API_KEY,     // ?
 				],
 				'method'  => 'DELETE',
