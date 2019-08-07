@@ -15,72 +15,71 @@ const ROOT_TAG = '__ROOT';
 
 add_action('wp_head', function() {
 
-    global $post;
+	global $post;
 
-    if ( ! $post ) {
-        return;
-    }
+	if ( ! $post ) {
+		return;
+	}
 
-    $public = $post->post_status === 'publish';
+	$public = $post->post_status === 'publish';
 
-    $show = true;
+	$show = true;
 
-    if ( $show ) {
-        // TODO check if manually hidden using ACF(?) field
-        // if ( get_post_meta( $post->ID, 'show_in_search' ) === false ) {
-        //     $show = false;
-        // }
-    }
+	if ( $show ) {
+		// TODO check if manually hidden using ACF(?) field
+		// if ( get_post_meta( $post->ID, 'show_in_search' ) === false ) {
+		//     $show = false;
+		// }
+	}
 
-    if ( is_multisite() ) {
-        $details = \get_blog_details();
-        $blogname = $details->blogname;
-        $blog_path = trim(  $details->path, '/' );
-    } else {
+	if ( is_multisite() ) {
+		$details = \get_blog_details();
+		$blogname = $details->blogname;
+		$blog_path = trim(  $details->path, '/' );
+	} else {
 		$blogname  = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://{$_SERVER['HTTP_HOST']}";
 		$blog_path = $_SERVER['REQUEST_URI'];
-    }
+	}
 
 
-    if ( ! $blog_path ) {
-        $blog_path = ROOT_TAG;
-    }
+	if ( ! $blog_path ) {
+		$blog_path = ROOT_TAG;
+	}
 
-    // Default tags for elasticsearch
-    $tags = [
-        'html',
-        'wordpress',
-        'wp_post_type/' . $post->post_type,
-        'wp_blog_name/' . sanitize_title( $blogname ),
-        'wp_blog_path/' . $blog_path,
-        $public ? 'public' : 'private',
-    ];
+	// Default tags for elasticsearch
+	$tags = [
+		'html',
+		'wordpress',
+		'wp_post_type/' . $post->post_type,
+		'wp_blog_name/' . sanitize_title( $blogname ),
+		'wp_blog_path/' . $blog_path,
+		$public ? 'public' : 'private',
+	];
 
 
-    $meta = [
-        'showInSearch' => $show,
-        'contentSelector' => apply_filters( 'valu_search_content_selector', '.main' ),
-        'title' => $post->post_title,
-        'siteName' => $blogname,
-        'language' => substr( get_locale(), 0, 2 ),
-        'created' => get_the_date( 'c', $post ),
-        'modified' => get_the_modified_date( 'c', $post ),
-        'tags' => $tags,
-    ];
+	$meta = [
+		'showInSearch' => $show,
+		'contentSelector' => apply_filters( 'valu_search_content_selector', '.main' ),
+		'title' => $post->post_title,
+		'siteName' => $blogname,
+		'language' => substr( get_locale(), 0, 2 ),
+		'created' => get_the_date( 'c', $post ),
+		'modified' => get_the_modified_date( 'c', $post ),
+		'tags' => $tags,
+	];
 
-    // Use the post language if using polylang instead of the blog locale.
-    if ( function_exists( 'pll_get_post_language' ) ) {
-        $meta[ 'language' ] = pll_get_post_language( $post->ID, 'slug' );
-    }
+	// Use the post language if using polylang instead of the blog locale.
+	if ( function_exists( 'pll_get_post_language' ) ) {
+		$meta[ 'language' ] = pll_get_post_language( $post->ID, 'slug' );
+	}
 
-    // Allow any custom modifications
-    $meta = apply_filters( 'valu_search_meta', $meta, $post );
+	// Allow any custom modifications
+	$meta = apply_filters( 'valu_search_meta', $meta, $post );
 
-    $json = wp_json_encode( $meta );
-    echo "<script type='text/json' id='valu-search'>$json</script>";
+	$json = wp_json_encode( $meta );
+	echo "<script type='text/json' id='valu-search'>$json</script>";
 
 });
-
 
 add_action( 'save_post', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
 add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
@@ -117,37 +116,7 @@ function handle_post_change( $post ) {
 		$blog_path = ROOT_TAG;
 	}
 
-	// Default tags for elasticsearch
-	$tags = [
-		'html',
-		'wordpress',
-		'wp_post_type/' . $post->post_type,
-		'wp_blog_name/' . sanitize_title( $blogname ),
-		'wp_blog_path/' . $blog_path,
-		$public ? 'public' : 'private',
-	];
-
-
-	$meta = [
-		'showInSearch'    => $show,
-		'contentSelector' => apply_filters( 'valu_search_content_selector', '.main' ),
-		'title'           => $post->post_title,
-		'siteName'        => $blogname,
-		'language'        => substr( get_locale(), 0, 2 ),
-		'created'         => get_the_date( 'c', $post ),
-		'modified'        => get_the_modified_date( 'c', $post ),
-		'tags'            => $tags,
-	];
-
-	// Use the post language if using polylang instead of the blog locale.
-	if ( function_exists( 'pll_get_post_language' ) ) {
-		$meta['language'] = pll_get_post_language( $post->ID, 'slug' );
-	}
-
-	// Allow any custom modifications
-	$meta = apply_filters( 'valu_search_meta', $meta, $post );
-
-	$json = wp_json_encode(['meta' => $meta]) ;
+	$json = wp_json_encode( [ 'url' => $blogname . $blog_path ] );
 
 	if ( 'publish' === get_post_status( get_the_ID() ) ) {
 
