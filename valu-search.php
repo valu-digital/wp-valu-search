@@ -13,6 +13,9 @@ Author URI: https://bitbucket.org/valudigital/valu-search
 
 const ROOT_TAG = '__ROOT';
 
+//placeholder
+const VALU_SEARCH_ENDPOINT = 'http://localhost:3000';
+
 add_action('wp_head', function() {
 
 	global $post;
@@ -92,17 +95,6 @@ function handle_post_change( $post ) {
 		return;
 	}
 
-	$public = 'publish' === $post->post_status;
-
-	$show = true;
-
-	if ( $show ) {
-		// TODO check if manually hidden using ACF(?) field
-		// if ( get_post_meta( $post->ID, 'show_in_search' ) === false ) {
-		//     $show = false;
-		// }
-	}
-
 	if ( is_multisite() ) {
 		$details   = \get_blog_details();
 		$blogname  = $details->blogname;
@@ -120,6 +112,7 @@ function handle_post_change( $post ) {
 
 	if ( 'publish' === get_post_status( get_the_ID() ) ) {
 
+
 		$url = VALU_SEARCH_ENDPOINT . "/trigger-scrape-site";
 
 		$response = wp_remote_request(
@@ -127,7 +120,7 @@ function handle_post_change( $post ) {
 			array(
 				'headers' => [
 					'Content-type'          => 'application/json',
-					'X-Valu-Search-Api-Key' => VALU_SEARCH_API_KEY,     // ?
+					//'X-Valu-Search-Api-Key' => VALU_SEARCH_API_KEY,     // ?
 				],
 				'method'  => 'POST',
 				'body'    => $json,
@@ -149,7 +142,7 @@ function handle_post_change( $post ) {
 			array(
 				'headers' => [
 					'Content-type'          => 'application/json',
-					'X-Valu-Search-Api-Key' => VALU_SEARCH_API_KEY,     // ?
+					//'X-Valu-Search-Api-Key' => VALU_SEARCH_API_KEY,     // ?
 				],
 				'method'  => 'DELETE',
 				'body'    => $json,
