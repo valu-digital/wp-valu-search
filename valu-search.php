@@ -94,8 +94,9 @@ function handle_post_change( $post ) {
 	if ( ! $post ) {
 		return;
 	}
+	$slug = get_search_customer_name( $post );
 
-	$json = wp_json_encode( [ 'url' => get_permalink() ] );
+	$json = wp_json_encode( [ 'url' => get_permalink(), 'index' => $slug ] );
 
 	if ( 'publish' === get_post_status( get_the_ID() ) ) {
 		$url = VALU_SEARCH_ENDPOINT . "/trigger-scrape-site";
@@ -134,4 +135,19 @@ function handle_post_change( $post ) {
 			echo "<script type='text/json' id='valu-search'>DELETE EITOIMI</script>";
 		}
 	}
+}
+
+function get_search_customer_name( $post ) {
+
+	$slug = $post->post_name;
+
+	if ( ! $slug ) {
+		return;
+	}
+
+	if ( ! defined( 'WP_ENV' ) || WP_ENV !== 'production' ) {
+		$slug = 'dev--' . $slug;
+	}
+
+	return $slug;
 }
