@@ -95,26 +95,10 @@ function handle_post_change( $post ) {
 		return;
 	}
 
-	if ( is_multisite() ) {
-		$details   = \get_blog_details();
-		$blogname  = $details->blogname;
-		$blog_path = trim( $details->path, '/' );
-	} else {
-		$blogname  = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://{$_SERVER['HTTP_HOST']}";
-		$blog_path = $_SERVER['REQUEST_URI'];
-	}
-
-	if ( ! $blog_path ) {
-		$blog_path = ROOT_TAG;
-	}
-
-	$json = wp_json_encode( [ 'url' => $blogname . $blog_path ] );
+	$json = wp_json_encode( [ 'url' => get_permalink() ] );
 
 	if ( 'publish' === get_post_status( get_the_ID() ) ) {
-
-
 		$url = VALU_SEARCH_ENDPOINT . "/trigger-scrape-site";
-
 		$response = wp_remote_request(
 			$url,
 			array(
@@ -126,17 +110,13 @@ function handle_post_change( $post ) {
 				'body'    => $json,
 			)
 		);
-
 		if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
 			echo "<script type='text/json' id='valu-search'>UPDATE TOIMI</script>";
 		} else {
 			echo "<script type='text/json' id='valu-search'>UPDATE EITOIMI</script>";
 		}
-
 	} else {
-
 		$url = VALU_SEARCH_ENDPOINT . "/trigger-delete-index";
-
 		$response = wp_remote_request(
 			$url,
 			array(
@@ -148,12 +128,10 @@ function handle_post_change( $post ) {
 				'body'    => $json,
 			)
 		);
-
 		if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
 			echo "<script type='text/json' id='valu-search'>DELETE TOIMI</script>";
 		} else {
 			echo "<script type='text/json' id='valu-search'>DELETE EITOIMI</script>";
 		}
-
 	}
 }
