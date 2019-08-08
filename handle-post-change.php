@@ -26,7 +26,7 @@ function handle_post_change( $post ) {
 	$url = ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http' ) . "://{$_SERVER['HTTP_HOST']}" . '/' . $post->post_name;
 
 	$json = wp_json_encode( [
-		'index'    => $slug,
+		'customerSlug'    => $slug,
 		'url'      => $url,
 	] );
 
