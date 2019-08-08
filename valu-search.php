@@ -17,7 +17,7 @@ const ROOT_TAG = '__ROOT';
 const VALU_SEARCH_ENDPOINT = 'http://localhost:3000';
 
 if(false !== VALU_SEARCH_API_KEY){
-	require handle-post-change.php;
+	require('handle-post-change.php');
 }
 
 add_action( 'wp_head', function () {
