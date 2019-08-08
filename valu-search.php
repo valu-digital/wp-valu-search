@@ -84,7 +84,7 @@ add_action( 'wp_head', function () {
 
 } );
 
-add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 0, 3 );
+add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
 
 function handle_post_change( $post ) {
 
