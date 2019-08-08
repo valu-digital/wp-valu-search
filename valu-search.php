@@ -84,8 +84,7 @@ add_action( 'wp_head', function () {
 
 } );
 
-add_action( 'save_post', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
-add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
+add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 0, 3 );
 
 function handle_post_change( $post ) {
 
@@ -95,64 +94,44 @@ function handle_post_change( $post ) {
 		return;
 	}
 	$slug = get_search_customer_name( $post );
-	$url  = ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http' ) . "://{$_SERVER['HTTP_HOST']}" . '/' . $post->post_name;
 
-	if ( 'publish' === get_post_status( get_the_ID() ) ) {
-
-		$json = wp_json_encode( [
-			'index' => $slug,
-			'page'  => [
-				'url'      => $url,
-				'siteName' => ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ? "https" : "http" ) . "://{$_SERVER['HTTP_HOST']}",
-				'tags'     => [
-					get_the_tags( get_the_ID() )
-				],
-				'content'  => $post->post_content,
-				'title'    => $post->post_title,
-				'language' => substr( get_locale(), 0, 2 ),
-				'modified' => date(DateTime::ISO8601),
-				'created'  => $post->post_date,
-			],
-		] );
-
-		$url      = VALU_SEARCH_ENDPOINT . "/trigger-scrape-site";
-		$response = wp_remote_request(
-			$url,
-			array(
-				'headers' => [
-					'Content-type' => 'application/json',
-					//'X-Valu-Search-Api-Key' => VALU_SEARCH_API_KEY,     // ?
-				],
-				'method'  => 'POST',
-				'body'    => $json,
-			)
-		);
-		if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
-			echo "<script type='text/json' id='valu-search'>UPDATE TOIMI</script>";
-		} else {
-			echo "<script type='text/json' id='valu-search'>UPDATE EITOIMI</script>";
-		}
+	if ( get_the_tags( $post->ID ) ) {
+		$tags = get_the_tags( $post->ID );
 	} else {
+		$tags = array();
+	}
 
-		$json = wp_json_encode( [ 'url' => $url, 'index' => $slug ] );
+	$url = ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http' ) . "://{$_SERVER['HTTP_HOST']}" . '/' . $post->post_name;
 
-		$url      = VALU_SEARCH_ENDPOINT . "/trigger-delete-index";
-		$response = wp_remote_request(
-			$url,
-			array(
-				'headers' => [
-					'Content-type' => 'application/json',
-					//'X-Valu-Search-Api-Key' => VALU_SEARCH_API_KEY,     // ?
-				],
-				'method'  => 'DELETE',
-				'body'    => $json,
-			)
-		);
-		if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
-			echo "<script type='text/json' id='valu-search'>DELETE TOIMI</script>";
-		} else {
-			echo "<script type='text/json' id='valu-search'>DELETE EITOIMI</script>";
-		}
+	$json = wp_json_encode( [
+		'index'    => $slug,
+		'url'      => $url,
+		'siteName' => ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ? "https" : "http" ) . "://{$_SERVER['HTTP_HOST']}",
+		'tags'     => $tags,
+		'content'  => $post->post_content,
+		'title'    => $post->post_title,
+		'language' => substr( get_locale(), 0, 2 ),
+		'modified' => date( 'c' ),
+		'created'  => $post->post_date,
+	] );
+
+	$url = VALU_SEARCH_ENDPOINT . "/trigger-scrape-site";
+
+	$response = wp_remote_request(
+		$url,
+		array(
+			'headers' => [
+				'Content-type' => 'application/json',
+				//'X-Valu-Search-Api-Key' => VALU_SEARCH_API_KEY,     // ?
+			],
+			'method'  => 'POST',
+			'body'    => $json,
+		)
+	);
+	if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+		echo "<script type='text/json' id='valu-search'>UPDATE TOIMI</script>";
+	} else {
+		echo "<script type='text/json' id='valu-search'>UPDATE EITOIMI</script>";
 	}
 }
 
