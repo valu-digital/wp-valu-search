@@ -95,24 +95,11 @@ function handle_post_change( $post ) {
 	}
 	$slug = get_search_customer_name( $post );
 
-	if ( get_the_tags( $post->ID ) ) {
-		$tags = get_the_tags( $post->ID );
-	} else {
-		$tags = array();
-	}
-
 	$url = ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http' ) . "://{$_SERVER['HTTP_HOST']}" . '/' . $post->post_name;
 
 	$json = wp_json_encode( [
 		'index'    => $slug,
 		'url'      => $url,
-		'siteName' => ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ? "https" : "http" ) . "://{$_SERVER['HTTP_HOST']}",
-		'tags'     => $tags,
-		'content'  => $post->post_content,
-		'title'    => $post->post_title,
-		'language' => substr( get_locale(), 0, 2 ),
-		'modified' => date( 'c' ),
-		'created'  => $post->post_date,
 	] );
 
 	$url = VALU_SEARCH_ENDPOINT . "/trigger-scrape-site";
