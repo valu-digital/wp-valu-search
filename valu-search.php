@@ -15,6 +15,7 @@ const ROOT_TAG = '__ROOT';
 
 //placeholder
 const VALU_SEARCH_ENDPOINT = 'http://localhost:3000';
+const VALU_SEARCH_API_KEY = 'devsecret';
 
 if(false !== VALU_SEARCH_API_KEY){
 	require('handle-post-change.php');
