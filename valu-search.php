@@ -45,7 +45,7 @@ add_action( 'wp_head', function () {
 		$blogname  = $details->blogname;
 		$blog_path = trim( $details->path, '/' );
 	} else {
-		$blogname  = ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ? "https" : "http" ) . "://{$_SERVER['HTTP_HOST']}";
+		$blogname  = get_bloginfo();
 		$blog_path = $_SERVER['REQUEST_URI'];
 	}
 
