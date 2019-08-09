@@ -44,8 +44,8 @@ function handle_post_change( $post ) {
 		)
 	);
 	if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
-		echo "<script type='text/json' id='valu-search'>UPDATE TOIMI</script>";
+		echo "Placeholder: OK";
 	} else {
-		echo "<script type='text/json' id='valu-search'>UPDATE EITOIMI</script>";
+		echo "Placeholder: NOT OK";
 	}
 }
