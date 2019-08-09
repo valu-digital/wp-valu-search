@@ -11,6 +11,8 @@ Author: Valu Digital
 Author URI: https://bitbucket.org/valudigital/valu-search
 */
 
+const VALU_SEARCH_CUSTOMER_SLUG = "dev--valufielokuu.json";
+
 add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
 
 function handle_post_change( $post ) {
@@ -21,12 +23,10 @@ function handle_post_change( $post ) {
 		return;
 	}
 
-	$slug = get_search_customer_name( $post );
-
 	$url = ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http' ) . "://{$_SERVER['HTTP_HOST']}" . '/' . $post->post_name;
 
 	$json = wp_json_encode( [
-		'customerSlug'    => $slug,
+		'customerSlug'    => VALU_SEARCH_CUSTOMER_SLUG,
 		'url'      => $url,
 	] );
 
@@ -48,19 +48,4 @@ function handle_post_change( $post ) {
 	} else {
 		echo "<script type='text/json' id='valu-search'>UPDATE EITOIMI</script>";
 	}
-}
-
-function get_search_customer_name( $post ) {
-
-	$slug = $post->post_name;
-
-	if ( ! $slug ) {
-		return;
-	}
-
-	if ( ! defined( 'WP_ENV' ) || WP_ENV !== 'production' ) {
-		$slug = 'dev--' . $slug;
-	}
-
-	return $slug;
 }
