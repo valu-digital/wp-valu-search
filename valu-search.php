@@ -2,6 +2,7 @@
 
 namespace Valu\Search;
 
+session_start();
 /*
 Plugin Name: Valu Search
 Version: 0.1.0

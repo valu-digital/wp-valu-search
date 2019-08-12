@@ -43,9 +43,39 @@ function handle_post_change( $post ) {
 			'body'    => $json,
 		)
 	);
-	if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
-		echo "Placeholder: OK";
-	} else {
-		echo "Placeholder: NOT OK";
+    if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+        $_SESSION['valu_search_sync_post'] = 1;
+    } else {
+        $_SESSION['valu_search_sync_post'] = $response;
+    }
+}
+
+add_action( 'admin_notices', __NAMESPACE__ . '\\show_admin_message_about_valu_search_sync' );
+
+/**
+ *  Handles the messages to be shown by admin notice hook.
+ */
+function show_admin_message_about_valu_search_sync() {
+	if ( isset( $_SESSION['valu_search_sync_post'] ) ) {
+		admin_notice_on_post_submit();
 	}
+}
+
+function admin_notice_on_post_submit() {
+	if ( 1 === $_SESSION['valu_search_sync_post'] ) :
+		?>
+		<div class="notice notice-success is-dismissible">
+			<p>Success! The page was succesfully reindexed.</p>
+		</div>
+	<?php
+	else :
+		?>
+		<div class="notice notice-error is-dismissible">
+			<p>There was an error reindexing the page!
+				<?php var_dump( $_SESSION['valu_search_sync_post'] ); ?>
+			</p>
+		</div>
+	<?php
+	endif;
+	unset( $_SESSION['valu_search_sync_post'] );
 }
