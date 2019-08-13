@@ -13,11 +13,25 @@ Author URI: https://bitbucket.org/valudigital/valu-search
 
 const ROOT_TAG = '__ROOT';
 
-//placeholder
-const VALU_SEARCH_ENDPOINT = 'http://localhost:3000';
-const VALU_SEARCH_API_KEY = 'devsecret';
+function can_enable_live_updates() {
+	if ( ! defined( 'VALU_SEARCH_ENDPOINT' ) ) {
+		return false;
+	}
 
-if(false !== VALU_SEARCH_API_KEY){
+	if ( ! defined( 'VALU_SEARCH_API_KEY' ) ) {
+		return false;
+	}
+
+	if ( ! defined( 'VALU_SEARCH_ENABLE_LIVE_UPDATES' ) ) {
+		return false;
+	} else if ( ! VALU_SEARCH_ENABLE_LIVE_UPDATES ) {
+		return false;
+	}
+
+	return true;
+}
+
+if( can_enable_live_updates() ){
 	require('handle-post-change.php');
 }
 
