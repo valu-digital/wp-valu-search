@@ -82,6 +82,7 @@ add_action( 'wp_head', function () {
 	$meta = [
 		'showInSearch'    => $show,
 		'contentSelector' => apply_filters( 'valu_search_content_selector', '.main' ),
+		'cleanupSelector' => apply_filters( 'valu_search_cleanup_selector', '' ),
 		'title'           => $post->post_title,
 		'siteName'        => $blogname,
 		'language'        => substr( get_locale(), 0, 2 ),
