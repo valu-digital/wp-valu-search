@@ -11,7 +11,7 @@ Author: Valu Digital
 Author URI: https://bitbucket.org/valudigital/valu-search
 */
 
-const VALU_SEARCH_CUSTOMER_SLUG = "dev--valufielokuu.json";
+const VALU_SEARCH_CUSTOMER_SLUG = "dev--valufielokuu";
 
 add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
 
