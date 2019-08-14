@@ -1,8 +1,6 @@
 <?php
 
 namespace Valu\Search;
-
-session_start();
 /*
 Plugin Name: Valu Search
 Version: 0.1.0
@@ -21,6 +19,10 @@ const VALU_SEARCH_API_KEY = 'devsecret';
 if(false !== VALU_SEARCH_API_KEY){
 	require('handle-post-change.php');
 }
+
+add_action( 'admin_init', function () {
+	session_start();
+}, 10 );
 
 add_action( 'wp_head', function () {
 
