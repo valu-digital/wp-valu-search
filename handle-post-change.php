@@ -12,6 +12,7 @@ Author URI: https://bitbucket.org/valudigital/valu-search
 */
 
 const VALU_SEARCH_CUSTOMER_SLUG = "dev--valufielokuu";
+const CUSTOMER_ADMIN_KEY = "80a03955b42bba8dcf4813022db329d733cc38cf";
 
 add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
 
@@ -30,14 +31,15 @@ function handle_post_change( $post ) {
 		'url'      => $url,
 	] );
 
-	$url = VALU_SEARCH_ENDPOINT . "/trigger-scrape-site";
+    $url = VALU_SEARCH_ENDPOINT . "/customers/" . VALU_SEARCH_CUSTOMER_SLUG . "/trigger-scrape-site";
 
 	$response = wp_remote_request(
 		$url,
 		array(
 			'headers' => [
 				'Content-type' => 'application/json',
-				'X-Valu-Search-Api-Key' => VALU_SEARCH_API_KEY,
+                'X-Valu-Search-Api-Key' => VALU_SEARCH_API_KEY,
+                'X-Customer-Admin-Api-Key' => CUSTOMER_ADMIN_KEY,
 			],
 			'method'  => 'POST',
 			'body'    => $json,
