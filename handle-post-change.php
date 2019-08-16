@@ -12,7 +12,7 @@ Author URI: https://bitbucket.org/valudigital/valu-search
 */
 
 const VALU_SEARCH_CUSTOMER_SLUG = "dev--valufielokuu";
-const CUSTOMER_ADMIN_KEY = "80a03955b42bba8dcf4813022db329d733cc38cf";
+const VALU_SEARCH_CUSTOMER_ADMIN_API_KEY = "80a03955b42bba8dcf4813022db329d733cc38cf";
 
 add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
 
@@ -39,7 +39,7 @@ function handle_post_change( $post ) {
 			'headers' => [
 				'Content-type' => 'application/json',
                 'X-Valu-Search-Api-Key' => VALU_SEARCH_API_KEY,
-                'X-Customer-Admin-Api-Key' => CUSTOMER_ADMIN_KEY,
+                'X-Customer-Admin-Api-Key' => VALU_SEARCH_CUSTOMER_ADMIN_API_KEY,
 			],
 			'method'  => 'POST',
 			'body'    => $json,
