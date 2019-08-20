@@ -26,25 +26,25 @@ function handle_post_change( $new_status, $old_status, $post ) {
 		'url'      => $url,
 	] );
 
-    $url = VALU_SEARCH_ENDPOINT . "/customers/" . VALU_SEARCH_CUSTOMER_SLUG . "/update-single-document";
+	$url = VALU_SEARCH_ENDPOINT . "/customers/" . VALU_SEARCH_CUSTOMER_SLUG . "/update-single-document";
 
 	$response = wp_remote_request(
 		$url,
 		array(
 			'headers' => [
 				'Content-type' => 'application/json',
-                'X-Valu-Search-Api-Key' => VALU_SEARCH_API_KEY,
-                'X-Customer-Admin-Api-Key' => VALU_SEARCH_CUSTOMER_ADMIN_API_KEY,
+				'X-Valu-Search-Api-Key' => VALU_SEARCH_API_KEY,
+				'X-Customer-Admin-Api-Key' => VALU_SEARCH_CUSTOMER_ADMIN_API_KEY,
 			],
 			'method'  => 'POST',
 			'body'    => $json,
 		)
 	);
-    if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
-        $_SESSION['valu_search_sync_post'] = 1;
-    } else {
-        $_SESSION['valu_search_sync_post'] = $response;
-    }
+	if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+		$_SESSION['valu_search_sync_post'] = 1;
+	} else {
+		$_SESSION['valu_search_sync_post'] = $response;
+	}
 }
 
 add_action( 'admin_notices', __NAMESPACE__ . '\\show_admin_message_about_valu_search_sync' );
