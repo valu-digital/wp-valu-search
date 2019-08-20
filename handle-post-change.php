@@ -13,9 +13,7 @@ Author URI: https://bitbucket.org/valudigital/valu-search
 
 add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
 
-function handle_post_change( $post ) {
-
-	global $post;
+function handle_post_change( $new_status, $old_status, $post ) {
 
 	if ( ! $post ) {
 		return;
