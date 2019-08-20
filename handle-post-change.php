@@ -31,7 +31,7 @@ function handle_post_change( $post ) {
 		'url'      => $url,
 	] );
 
-    $url = VALU_SEARCH_ENDPOINT . "/customers/" . VALU_SEARCH_CUSTOMER_SLUG . "/trigger-scrape-site";
+    $url = VALU_SEARCH_ENDPOINT . "/customers/" . VALU_SEARCH_CUSTOMER_SLUG . "/update-single-document";
 
 	$response = wp_remote_request(
 		$url,
