@@ -15,15 +15,14 @@ add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10
 
 function handle_post_change( $new_status, $old_status, $post ) {
 
-    if ( $new_status !== 'publish' && $old_status !== 'publish') {
-        return;
-    }
+	if ( $new_status !== 'publish' && $old_status !== 'publish') {
+		return;
+	}
 
 	if ( ! $post ) {
 		return;
 	}
-
-	$url = ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http' ) . "://{$_SERVER['HTTP_HOST']}" . '/' . $post->post_name;
+	$url = get_generic_permalink($post);
 
 	$json = wp_json_encode( [
 		'customerSlug'    => VALU_SEARCH_CUSTOMER_SLUG,
@@ -49,6 +48,11 @@ function handle_post_change( $new_status, $old_status, $post ) {
 	} else {
 		$_SESSION['valu_search_sync_post'] = $response;
 	}
+}
+
+function get_generic_permalink($post){
+	$permalink_array = get_sample_permalink( $post->ID, $post->post_title, '' );
+	return str_replace( '%pagename%', $permalink_array[1], $permalink_array[0] );
 }
 
 add_action( 'admin_notices', __NAMESPACE__ . '\\show_admin_message_about_valu_search_sync' );
