@@ -21,6 +21,14 @@ function can_enable_live_updates() {
 		return false;
 	}
 
+	if ( ! defined( 'VALU_SEARCH_CUSTOMER_SLUG' ) ){
+		return false;
+	}
+
+	if ( ! defined( 'VALU_SEARCH_CUSTOMER_ADMIN_API_KEY' ) ){
+		return false;
+	}
+
 	if ( ! defined( 'VALU_SEARCH_ENABLE_LIVE_UPDATES' ) ) {
 		return false;
 	} else if ( ! VALU_SEARCH_ENABLE_LIVE_UPDATES ) {
