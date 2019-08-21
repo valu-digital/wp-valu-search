@@ -1,7 +1,6 @@
 <?php
 
 namespace Valu\Search;
-
 /*
 Plugin Name: Valu Search
 Version: 0.1.0
@@ -22,6 +21,14 @@ function can_enable_live_updates() {
 		return false;
 	}
 
+	if ( ! defined( 'VALU_SEARCH_CUSTOMER_SLUG' ) ){
+		return false;
+	}
+
+	if ( ! defined( 'VALU_SEARCH_CUSTOMER_ADMIN_API_KEY' ) ){
+		return false;
+	}
+
 	if ( ! defined( 'VALU_SEARCH_ENABLE_LIVE_UPDATES' ) ) {
 		return false;
 	} else if ( ! VALU_SEARCH_ENABLE_LIVE_UPDATES ) {
@@ -34,6 +41,10 @@ function can_enable_live_updates() {
 if( can_enable_live_updates() ){
 	require('handle-post-change.php');
 }
+
+add_action( 'admin_init', function () {
+	session_start();
+}, 10 );
 
 add_action( 'wp_head', function () {
 
