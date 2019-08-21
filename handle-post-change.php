@@ -12,17 +12,17 @@ Author URI: https://bitbucket.org/valudigital/valu-search
 */
 
 add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
+add_action( 'shutdown', __NAMESPACE__ . '\\send_request', 10 );
 
-function handle_post_change( $new_status, $old_status, $post ) {
+$url = "";
 
-	if ( $new_status !== 'publish' && $old_status !== 'publish') {
+function send_request(){
+
+	if(!$GLOBALS['url']){
 		return;
 	}
 
-	if ( ! $post ) {
-		return;
-	}
-	$url = get_generic_permalink($post);
+	$url = $GLOBALS['url'];
 
 	$json = wp_json_encode( [
 		'customerSlug'    => VALU_SEARCH_CUSTOMER_SLUG,
@@ -50,9 +50,39 @@ function handle_post_change( $new_status, $old_status, $post ) {
 	}
 }
 
+function handle_post_change( $new_status, $old_status, $post ) {
+
+	if ( $new_status !== 'publish' && $old_status !== 'publish') {
+		return;
+	}
+
+
+	if ( ! $post ) {
+		return;
+	}
+
+	if ( wp_is_post_revision( $post ) ){
+		return;
+	}
+
+	$GLOBALS['url'] = get_generic_permalink($post);
+}
+
 function get_generic_permalink($post){
-	$permalink_array = get_sample_permalink( $post->ID, $post->post_title, '' );
-	return str_replace( '%pagename%', $permalink_array[1], $permalink_array[0] );
+
+	//check first if post is trashed
+	if( preg_match( '/__trashed\/\z/', get_permalink( $post ) ) ){
+			$url = get_permalink( $post );
+			return preg_replace('/__trashed\/\z/', '/', $url);
+	}else{
+		$my_post = clone $post;
+		$my_post->post_status = 'publish';
+		$my_post->post_name = sanitize_title(
+			$my_post->post_name ? $my_post->post_name : $my_post->post_title,
+			$my_post->ID
+		);
+		return get_permalink( $my_post );
+	}
 }
 
 add_action( 'admin_notices', __NAMESPACE__ . '\\show_admin_message_about_valu_search_sync' );
