@@ -15,6 +15,10 @@ add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10
 
 function handle_post_change( $new_status, $old_status, $post ) {
 
+    if ( $new_status !== 'publish' && $old_status !== 'publish') {
+        return;
+    }
+
 	if ( ! $post ) {
 		return;
 	}
