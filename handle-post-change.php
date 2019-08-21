@@ -30,10 +30,10 @@ function handle_post_change( $new_status, $old_status, $post ) {
 		'url'      => $url,
 	] );
 
-	$url = VALU_SEARCH_ENDPOINT . "/customers/" . VALU_SEARCH_CUSTOMER_SLUG . "/update-single-document";
+	$endpoint_url = VALU_SEARCH_ENDPOINT . "/customers/" . VALU_SEARCH_CUSTOMER_SLUG . "/update-single-document";
 
 	$response = wp_remote_request(
-		$url,
+		$endpoint_url,
 		array(
 			'headers' => [
 				'Content-type' => 'application/json',
