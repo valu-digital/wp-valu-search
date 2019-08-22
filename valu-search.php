@@ -89,7 +89,6 @@ add_action( 'wp_head', function () {
 		'contentSelector' => apply_filters( 'valu_search_content_selector', '.main' ),
 		'cleanupSelector' => apply_filters( 'valu_search_cleanup_selector', '' ),
 		'title'           => $post->post_title,
-		'siteName'        => $blogname,
 		'language'        => substr( get_locale(), 0, 2 ),
 		'created'         => get_the_date( 'c', $post ),
 		'modified'        => get_the_modified_date( 'c', $post ),
