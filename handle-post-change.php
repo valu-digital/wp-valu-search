@@ -12,29 +12,31 @@ Author URI: https://bitbucket.org/valudigital/valu-search
 */
 
 add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
+add_action( 'shutdown', __NAMESPACE__ . '\\send_request', 10 );
 
-function handle_post_change( $new_status, $old_status, $post ) {
+$url = "";
 
-	if ( ! $post ) {
+function send_request(){
+
+	if(!$GLOBALS['url']){
 		return;
 	}
 
-	$url = ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http' ) . "://{$_SERVER['HTTP_HOST']}" . '/' . $post->post_name;
+	$url = $GLOBALS['url'];
 
 	$json = wp_json_encode( [
 		'customerSlug'    => VALU_SEARCH_CUSTOMER_SLUG,
 		'url'      => $url,
 	] );
 
-	$url = VALU_SEARCH_ENDPOINT . "/customers/" . VALU_SEARCH_CUSTOMER_SLUG . "/update-single-document";
+	$endpoint_url = VALU_SEARCH_ENDPOINT . "/customers/" . VALU_SEARCH_CUSTOMER_SLUG . "/update-single-document";
 
 	$response = wp_remote_request(
-		$url,
+		$endpoint_url,
 		array(
 			'headers' => [
 				'Content-type' => 'application/json',
-				'X-Valu-Search-Api-Key' => VALU_SEARCH_API_KEY,
-				'X-Customer-Admin-Api-Key' => VALU_SEARCH_CUSTOMER_ADMIN_API_KEY,
+				'X-Valu-Search-Auth' => VALU_SEARCH_CUSTOMER_ADMIN_API_KEY,
 			],
 			'method'  => 'POST',
 			'body'    => $json,
@@ -44,6 +46,41 @@ function handle_post_change( $new_status, $old_status, $post ) {
 		$_SESSION['valu_search_sync_post'] = 1;
 	} else {
 		$_SESSION['valu_search_sync_post'] = $response;
+	}
+}
+
+function handle_post_change( $new_status, $old_status, $post ) {
+
+	if ( $new_status !== 'publish' && $old_status !== 'publish') {
+		return;
+	}
+
+
+	if ( ! $post ) {
+		return;
+	}
+
+	if ( wp_is_post_revision( $post ) ){
+		return;
+	}
+
+	$GLOBALS['url'] = get_generic_permalink($post);
+}
+
+function get_generic_permalink($post){
+
+	//check first if post is trashed
+	if( preg_match( '/__trashed\/\z/', get_permalink( $post ) ) ){
+			$url = get_permalink( $post );
+			return preg_replace('/__trashed\/\z/', '/', $url);
+	}else{
+		$my_post = clone $post;
+		$my_post->post_status = 'publish';
+		$my_post->post_name = sanitize_title(
+			$my_post->post_name ? $my_post->post_name : $my_post->post_title,
+			$my_post->ID
+		);
+		return get_permalink( $my_post );
 	}
 }
 
