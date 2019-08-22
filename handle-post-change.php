@@ -36,8 +36,7 @@ function send_request(){
 		array(
 			'headers' => [
 				'Content-type' => 'application/json',
-				'X-Valu-Search-Api-Key' => VALU_SEARCH_API_KEY,
-				'X-Customer-Admin-Api-Key' => VALU_SEARCH_CUSTOMER_ADMIN_API_KEY,
+				'X-Valu-Search-Auth' => VALU_SEARCH_CUSTOMER_ADMIN_API_KEY,
 			],
 			'method'  => 'POST',
 			'body'    => $json,
