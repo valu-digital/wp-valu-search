@@ -41,3 +41,7 @@ function get_flash_messages() {
 
 	return unserialize( $data );
 }
+
+function clear_flash_messages() {
+	delete_transient( get_flash_message_key() );
+}

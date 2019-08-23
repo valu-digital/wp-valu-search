@@ -104,7 +104,7 @@ function show_admin_message_about_valu_search_sync() {
 		}
 	}
 
-	delete_transient( get_flash_message_key() );
+	clear_flash_messages();
 }
 
 function success_message( $message ) {
