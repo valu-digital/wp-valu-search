@@ -51,9 +51,9 @@ function get_blog_info_array(){
 	return $bloginfo;
 }
 
-require_once( __DIR__ . '/page-meta.php');
-require_once( __DIR__ . '/site-meta.php');
+require_once( __DIR__ . '/lib/page-meta.php');
+require_once( __DIR__ . '/lib/site-meta.php');
 
 if ( can_enable_live_updates() ){
-	require_once( __DIR__ . '/handle-post-change.php');
+	require_once( __DIR__ . '/lib/handle-post-change.php');
 }
