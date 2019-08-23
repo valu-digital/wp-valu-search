@@ -1,6 +1,6 @@
 <?php
 
-namespace Valu\Search;
+namespace ValuSearch;
 
 require_once __DIR__ . '/flash-message.php';
 

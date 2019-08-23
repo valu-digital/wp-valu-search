@@ -1,6 +1,7 @@
 <?php
 
-namespace Valu\Search;
+namespace ValuSearch;
+
 /*
 Plugin Name: Valu Search
 Version: 0.1.0

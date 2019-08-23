@@ -1,5 +1,7 @@
 <?php
 
+namespace ValuSearch;
+
 function get_flash_message_key() {
 	$id = get_current_user_id();
 
