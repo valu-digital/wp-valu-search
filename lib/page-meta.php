@@ -50,6 +50,10 @@ function render_page_meta_tag() {
 	// Allow any custom modifications
 	$meta = apply_filters( 'valu_search_meta', $meta, $post );
 
+	if ( empty( $meta ) ) {
+		return;
+	}
+
 	$json = wp_json_encode( $meta );
 	echo "<script type='text/json' id='valu-search'>$json</script>";
 
