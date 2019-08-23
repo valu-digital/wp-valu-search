@@ -61,10 +61,10 @@ function handle_post_change( $new_status, $old_status, $post ) {
 function get_generic_permalink($post){
 
 	//check first if post is trashed
-	if( preg_match( '/__trashed\/\z/', get_permalink( $post ) ) ){
+	if ( preg_match( '/__trashed\/\z/', get_permalink( $post ) ) ) {
 			$url = get_permalink( $post );
 			return preg_replace('/__trashed\/\z/', '/', $url);
-	}else{
+	} else {
 		$my_post = clone $post;
 		$my_post->post_status = 'publish';
 		$my_post->post_name = sanitize_title(
