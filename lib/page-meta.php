@@ -4,6 +4,12 @@ namespace ValuSearch;
 
 function render_page_meta_tag() {
 
+	// Valu Search Crawler adds ?_vsid=timestamp query string for all requests. We
+	// can bail out if it is not present.
+	if ( ! isset( $_GET['_vsid'] ) ) {
+		return;
+	}
+
 	global $post;
 
 	if ( ! $post ) {
