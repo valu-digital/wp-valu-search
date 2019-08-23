@@ -28,7 +28,6 @@ function render_page_meta_tag() {
 
 	// Default tags for Valu Search index
 	$tags = [
-		'html',
 		'wordpress',
 		'wp_post_type/' . $post->post_type,
 		'wp_blog_name/' . sanitize_title( $blogname ),
