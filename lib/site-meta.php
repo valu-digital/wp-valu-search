@@ -5,6 +5,7 @@ namespace ValuSearch;
 
 function render_valu_search_json() {
 
+    // XXX does not work for sites mounted on sub urls
 	if ( '/valu-search.json' !== $_SERVER['REQUEST_URI'] ) {
         return;
     }
