@@ -63,7 +63,7 @@ See all available fields on <https://search.valu.pro/page-meta>
 -   `$meta` (assoc array)
 -   `$post` (WP_Post) the post of the page being indexed
 
-Global option for the crawler
+Global options for the crawler exposed on `yoursite.example/valu-search.json`.
 
 See all available fields on <https://search.valu.pro/site-meta>
 
