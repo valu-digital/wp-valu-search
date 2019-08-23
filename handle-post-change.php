@@ -7,7 +7,6 @@ require_once __DIR__ . '/flash-message.php';
 add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
 add_action( 'shutdown', __NAMESPACE__ . '\\send_request', 10 );
 
-$url = "";
 
 function send_request(){
 
