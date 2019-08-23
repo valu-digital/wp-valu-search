@@ -20,7 +20,7 @@ function render_page_meta_tag() {
 		$blog_path = ROOT_TAG;
 	}
 
-	// Default tags for elasticsearch
+	// Default tags for Valu Search index
 	$tags = [
 		'html',
 		'wordpress',
