@@ -2,6 +2,8 @@
 
 namespace Valu\Search;
 
+require_once __DIR__ . '/flash-message.php';
+
 add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
 add_action( 'shutdown', __NAMESPACE__ . '\\send_request', 10 );
 
@@ -34,9 +36,9 @@ function send_request(){
 		)
 	);
 	if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
-		$_SESSION['valu_search_sync_post'] = 1;
+		enqueue_flash_message( "Search index update success!", 'success' );
 	} else {
-		$_SESSION['valu_search_sync_post'] = $response;
+		enqueue_flash_message( $response, 'error' );
 	}
 }
 
@@ -81,30 +83,35 @@ add_action( 'admin_notices', __NAMESPACE__ . '\\show_admin_message_about_valu_se
  *  Handles the messages to be shown by admin notice hook.
  */
 function show_admin_message_about_valu_search_sync() {
-	if (! is_super_admin() ) {
+	if ( ! is_super_admin() ) {
 		return;
 	}
 
-	if ( isset( $_SESSION['valu_search_sync_post'] ) ) {
-		admin_notice_on_post_submit();
+	foreach ( get_flash_messages() as $message ) {
+		if ( "success" === $message['type'] ) {
+			success_message( $message['message'] );
+		} else {
+			error_message( $message['message'] );
+		}
 	}
+
+	delete_transient( get_flash_message_key() );
 }
 
-function admin_notice_on_post_submit() {
-	if ( 1 === $_SESSION['valu_search_sync_post'] ) :
-		?>
+function success_message( $message ) {
+	?>
 		<div class="notice notice-success is-dismissible">
-			<p>Success! The page was succesfully reindexed.</p>
+			<p><?php echo esc_html( $message ) ?></p>
 		</div>
 	<?php
-	else :
-		?>
+}
+
+function error_message( $error ) {
+	?>
 		<div class="notice notice-error is-dismissible">
 			<p>There was an error reindexing the page!
-				<?php var_dump( $_SESSION['valu_search_sync_post'] ); ?>
+				<?php var_dump( $error ); ?>
 			</p>
 		</div>
 	<?php
-	endif;
-	unset( $_SESSION['valu_search_sync_post'] );
 }

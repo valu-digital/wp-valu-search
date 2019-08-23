@@ -38,9 +38,6 @@ if( can_enable_live_updates() ){
 	require('handle-post-change.php');
 }
 
-add_action( 'admin_init', function () {
-	session_start();
-}, 10 );
 
 add_action( 'wp_head', function () {
 
