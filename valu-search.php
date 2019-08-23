@@ -37,6 +37,8 @@ function can_enable_live_updates() {
 
 
 function get_blog_info_array(){
+	$bloginfo = [];
+
 	if ( is_multisite() ) {
 		$details   = \get_blog_details();
 		$bloginfo['blogname']  = $details->blogname;
@@ -45,6 +47,7 @@ function get_blog_info_array(){
 		$bloginfo['blogname']  = get_bloginfo();
 		$bloginfo['blog_path'] = $_SERVER['REQUEST_URI'];
 	}
+
 	return $bloginfo;
 }
 
