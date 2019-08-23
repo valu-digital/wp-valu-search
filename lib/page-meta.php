@@ -39,7 +39,7 @@ function render_page_meta_tag() {
 		'language'        => substr( get_locale(), 0, 2 ),
 		'created'         => get_the_date( 'c', $post ),
 		'modified'        => get_the_modified_date( 'c', $post ),
-		'tags'            => $tags,
+		'tags'            => apply_filters( 'valu_search_tags', $tags ),
 	];
 
 	// Use the post language if using polylang instead of the blog locale.
