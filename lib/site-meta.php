@@ -16,7 +16,7 @@ function render_valu_search_json() {
         'siteName' => $bloginfo['blogname'],
     ];
 
-    $config = apply_filters( 'valu_search_site_config' , $config );
+    $config = apply_filters( 'valu_search_site_meta' , $config );
 
     header( 'Content-type: application/json' );
     echo json_encode( $config );

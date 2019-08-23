@@ -52,7 +52,7 @@ function render_page_meta_tag() {
 	}
 
 	// Allow any custom modifications
-	$meta = apply_filters( 'valu_search_meta', $meta, $post );
+	$meta = apply_filters( 'valu_search_page_meta', $meta, $post );
 
 	if ( empty( $meta ) ) {
 		return;
