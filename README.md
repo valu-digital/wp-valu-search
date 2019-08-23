@@ -11,14 +11,14 @@ This plugin does not provide any UI. It just exposes some config options and fil
 
 ## Filters
 
-## `valu_search_show_in_search`
+### `valu_search_show_in_search`
 
 Parameters
 
 -   `$show` (boolean) whether to index the page at all
 -   `$post` (WP_Post) the post of the page being indexed
 
-## `valu_search_content_selector`
+### `valu_search_content_selector`
 
 Parameters
 
@@ -31,7 +31,7 @@ List of all supported selectors can be found from [here](css-select).
 
 [css-select]: https://www.npmjs.com/package/css-select#supported-selectors
 
-## `valu_search_cleanup_selector`
+### `valu_search_cleanup_selector`
 
 Parameters
 
@@ -40,7 +40,7 @@ Parameters
 
 Remove content from selected elements.
 
-## `valu_search_tags`
+### `valu_search_tags`
 
 Parameters
 
@@ -49,7 +49,7 @@ Parameters
 
 List of tags the page gets indexed with.
 
-## `valu_search_page_meta`
+### `valu_search_page_meta`
 
 -   `$meta` (assoc array)
 -   `$post` (WP_Post) the post of the page being indexed
@@ -58,7 +58,7 @@ The full data rendered to the meta tag.
 
 See all available fields on <https://search.valu.pro/page-meta>
 
-## `valu_search_site_meta`
+### `valu_search_site_meta`
 
 -   `$meta` (assoc array)
 -   `$post` (WP_Post) the post of the page being indexed
