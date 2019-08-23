@@ -31,7 +31,6 @@ function render_page_meta_tag() {
 		'wordpress',
 		'wp_post_type/' . $post->post_type,
 		'wp_blog_name/' . sanitize_title( $blogname ),
-		'wp_blog_path/' . $blog_path,
 		$public ? 'public' : 'private',
 	];
 
