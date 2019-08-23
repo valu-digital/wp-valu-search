@@ -9,16 +9,16 @@ add_action( 'shutdown', __NAMESPACE__ . '\\send_request', 10 );
 
 
 function send_request(){
+	$url = $GLOBALS['valu-search-url'];
 
-	if(!$GLOBALS['valu-search-url']){
+	if ( ! $url ) {
 		return;
 	}
 
-	$url = $GLOBALS['valu-search-url'];
 
 	$json = wp_json_encode( [
-		'customerSlug'    => VALU_SEARCH_CUSTOMER_SLUG,
-		'url'      => $url,
+		'customerSlug' => VALU_SEARCH_CUSTOMER_SLUG,
+		'url' => $url,
 	] );
 
 	$endpoint_url = VALU_SEARCH_ENDPOINT . "/customers/" . VALU_SEARCH_CUSTOMER_SLUG . "/update-single-document";
