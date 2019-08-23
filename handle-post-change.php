@@ -2,15 +2,6 @@
 
 namespace Valu\Search;
 
-/*
-Plugin Name: Valu Search
-Version: 0.1.0
-Plugin URI: https://www.valu.fi
-Description: Expose page metadata for the Search crawler
-Author: Valu Digital
-Author URI: https://bitbucket.org/valudigital/valu-search
-*/
-
 add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
 add_action( 'shutdown', __NAMESPACE__ . '\\send_request', 10 );
 
