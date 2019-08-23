@@ -81,6 +81,10 @@ add_action( 'admin_notices', __NAMESPACE__ . '\\show_admin_message_about_valu_se
  *  Handles the messages to be shown by admin notice hook.
  */
 function show_admin_message_about_valu_search_sync() {
+	if (! is_super_admin() ) {
+		return;
+	}
+
 	if ( isset( $_SESSION['valu_search_sync_post'] ) ) {
 		admin_notice_on_post_submit();
 	}
