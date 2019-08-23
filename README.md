@@ -25,7 +25,7 @@ Parameters
 -   `$selector` (string) CSS selector for picking the content elements
 -   `$post` (WP_Post) the post of the page being indexed
 
-Multiple can be seperated by comma. Ex. `.content,.main`
+Multiple selectors can be separated by comma. Ex. `.content,.main`
 
 List of all supported selectors can be found from [here](css-select).
 
