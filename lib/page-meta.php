@@ -32,14 +32,14 @@ function render_page_meta_tag() {
 
 
 	$meta = [
-		'showInSearch'    => apply_filters( 'valu_search_show_in_search', $post, $public ),
-		'contentSelector' => apply_filters( 'valu_search_content_selector', '.main' ),
-		'cleanupSelector' => apply_filters( 'valu_search_cleanup_selector', '' ),
+		'showInSearch'    => apply_filters( 'valu_search_show_in_search', $public, $post ),
+		'contentSelector' => apply_filters( 'valu_search_content_selector', '.main', $post ),
+		'cleanupSelector' => apply_filters( 'valu_search_cleanup_selector', '', $post ),
 		'title'           => $post->post_title,
 		'language'        => substr( get_locale(), 0, 2 ),
 		'created'         => get_the_date( 'c', $post ),
 		'modified'        => get_the_modified_date( 'c', $post ),
-		'tags'            => apply_filters( 'valu_search_tags', $tags ),
+		'tags'            => apply_filters( 'valu_search_tags', $tags, $post ),
 	];
 
 	// Use the post language if using polylang instead of the blog locale.
