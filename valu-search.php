@@ -52,15 +52,6 @@ add_action( 'wp_head', function () {
 
 	$public = $post->post_status === 'publish';
 
-	$show = true;
-
-	if ( $show ) {
-		// TODO check if manually hidden using ACF(?) field
-		// if ( get_post_meta( $post->ID, 'show_in_search' ) === false ) {
-		//     $show = false;
-		// }
-	}
-
 	$bloginfo = get_blog_info_array();
 	$blogname = $bloginfo['blogname'];
 	$blog_path = $bloginfo['blog_path'];
@@ -81,7 +72,7 @@ add_action( 'wp_head', function () {
 
 
 	$meta = [
-		'showInSearch'    => $show,
+		'showInSearch'    => apply_filters( 'valu_search_show_in_search', $post, $public ),
 		'contentSelector' => apply_filters( 'valu_search_content_selector', '.main' ),
 		'cleanupSelector' => apply_filters( 'valu_search_cleanup_selector', '' ),
 		'title'           => $post->post_title,
