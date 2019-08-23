@@ -2,6 +2,7 @@
 
 namespace ValuSearch;
 
+
 function render_valu_search_json() {
 
 	if ( '/valu-search.json' !== $_SERVER['REQUEST_URI'] ) {
@@ -9,10 +10,15 @@ function render_valu_search_json() {
     }
 
     $bloginfo = get_blog_info_array();
-    $config['siteName'] = $bloginfo['blogname'];
-    $content = apply_filters( 'valu_search_site_config' , $config );
+
+    $config = [
+        'siteName' => $bloginfo['blogname'],
+    ];
+
+    $config = apply_filters( 'valu_search_site_config' , $config );
+
     header( 'Content-type: application/json' );
-    echo json_encode( $content );
+    echo json_encode( $config );
     die();
 
 }
