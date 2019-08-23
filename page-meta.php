@@ -2,7 +2,7 @@
 
 namespace ValuSearch;
 
-add_action( 'wp_head', function () {
+function render_page_meta_tag() {
 
 	global $post;
 
@@ -53,4 +53,6 @@ add_action( 'wp_head', function () {
 	$json = wp_json_encode( $meta );
 	echo "<script type='text/json' id='valu-search'>$json</script>";
 
-} );
+}
+
+add_action( 'wp_head', __NAMESPACE__ . '\\render_page_meta_tag', 10 );
