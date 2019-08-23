@@ -61,15 +61,9 @@ add_action( 'wp_head', function () {
 		// }
 	}
 
-	if ( is_multisite() ) {
-		$details   = \get_blog_details();
-		$blogname  = $details->blogname;
-		$blog_path = trim( $details->path, '/' );
-	} else {
-		$blogname  = get_bloginfo();
-		$blog_path = $_SERVER['REQUEST_URI'];
-	}
-
+	$bloginfo = get_blog_info_array();
+	$blogname = $bloginfo['blogname'];
+	$blog_path = $bloginfo['blog_path'];
 
 	if ( ! $blog_path ) {
 		$blog_path = ROOT_TAG;
@@ -91,7 +85,6 @@ add_action( 'wp_head', function () {
 		'contentSelector' => apply_filters( 'valu_search_content_selector', '.main' ),
 		'cleanupSelector' => apply_filters( 'valu_search_cleanup_selector', '' ),
 		'title'           => $post->post_title,
-		'siteName'        => $blogname,
 		'language'        => substr( get_locale(), 0, 2 ),
 		'created'         => get_the_date( 'c', $post ),
 		'modified'        => get_the_modified_date( 'c', $post ),
@@ -110,3 +103,28 @@ add_action( 'wp_head', function () {
 	echo "<script type='text/json' id='valu-search'>$json</script>";
 
 } );
+
+function get_blog_info_array(){
+	if ( is_multisite() ) {
+		$details   = \get_blog_details();
+		$bloginfo['blogname']  = $details->blogname;
+		$bloginfo['blog_path'] = trim( $details->path, '/' );
+	} else {
+		$bloginfo['blogname']  = get_bloginfo();
+		$bloginfo['blog_path'] = $_SERVER['REQUEST_URI'];
+	}
+	return $bloginfo;
+}
+
+
+add_action( 'template_redirect', function(){
+
+	if('/valu-search.json' === $_SERVER['REQUEST_URI']){
+		$bloginfo = get_blog_info_array();
+		$config['siteName'] = $bloginfo['blogname'];
+		$content = apply_filters( 'valu_search_site_config' , $config);
+		echo json_encode($content);
+		die();
+	}
+
+});

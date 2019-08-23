@@ -9,11 +9,11 @@ $url = "";
 
 function send_request(){
 
-	if(!$GLOBALS['url']){
+	if(!$GLOBALS['valu-search-url']){
 		return;
 	}
 
-	$url = $GLOBALS['url'];
+	$url = $GLOBALS['valu-search-url'];
 
 	$json = wp_json_encode( [
 		'customerSlug'    => VALU_SEARCH_CUSTOMER_SLUG,
@@ -55,7 +55,7 @@ function handle_post_change( $new_status, $old_status, $post ) {
 		return;
 	}
 
-	$GLOBALS['url'] = get_generic_permalink($post);
+	$GLOBALS['valu-search-url'] = get_generic_permalink($post);
 }
 
 function get_generic_permalink($post){
