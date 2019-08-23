@@ -17,7 +17,6 @@ function send_request(){
 
 
 	$json = wp_json_encode( [
-		'customerSlug' => VALU_SEARCH_CUSTOMER_SLUG,
 		'url' => $url,
 	] );
 
