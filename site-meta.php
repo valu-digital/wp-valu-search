@@ -2,7 +2,7 @@
 
 namespace ValuSearch;
 
-add_action( 'template_redirect', function(){
+function render_valu_search_json() {
 
 	if ( '/valu-search.json' !== $_SERVER['REQUEST_URI'] ) {
         return;
@@ -14,4 +14,6 @@ add_action( 'template_redirect', function(){
     echo json_encode( $content );
     die();
 
-});
+}
+
+add_action( 'template_redirect', __NAMESPACE__ . '\\render_valu_search_json', 10 );
