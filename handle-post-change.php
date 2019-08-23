@@ -4,11 +4,7 @@ namespace Valu\Search;
 
 require_once __DIR__ . '/flash-message.php';
 
-add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
-add_action( 'shutdown', __NAMESPACE__ . '\\send_request', 10 );
-
-
-function send_request(){
+function send_request() {
 	$url = $GLOBALS['valu-search-url'];
 
 	if ( ! $url ) {
@@ -40,6 +36,8 @@ function send_request(){
 	}
 }
 
+add_action( 'shutdown', __NAMESPACE__ . '\\send_request', 10 );
+
 function handle_post_change( $new_status, $old_status, $post ) {
 
 	if ( $new_status !== 'publish' && $old_status !== 'publish') {
@@ -57,6 +55,8 @@ function handle_post_change( $new_status, $old_status, $post ) {
 
 	$GLOBALS['valu-search-url'] = get_generic_permalink($post);
 }
+
+add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
 
 function get_generic_permalink($post){
 
