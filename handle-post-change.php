@@ -4,6 +4,10 @@ namespace Valu\Search;
 
 require_once __DIR__ . '/flash-message.php';
 
+function can_see_status_messages() {
+	return is_super_admin();
+}
+
 function send_request() {
 	$url = $GLOBALS['valu-search-url'];
 
@@ -20,15 +24,22 @@ function send_request() {
 
 	$response = wp_remote_request(
 		$endpoint_url,
-		array(
+		[
 			'headers' => [
 				'Content-type' => 'application/json',
 				'X-Valu-Search-Auth' => VALU_SEARCH_CUSTOMER_ADMIN_API_KEY,
 			],
 			'method'  => 'POST',
 			'body'    => $json,
-		)
+			// No need to wait for response when not showing the status
+			'blocking' => can_see_status_messages(),
+		]
 	);
+
+	if ( ! can_see_status_messages() ) {
+		return;
+	}
+
 	if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
 		enqueue_flash_message( "Search index update success!", 'success' );
 	} else {
@@ -81,7 +92,7 @@ add_action( 'admin_notices', __NAMESPACE__ . '\\show_admin_message_about_valu_se
  *  Handles the messages to be shown by admin notice hook.
  */
 function show_admin_message_about_valu_search_sync() {
-	if ( ! is_super_admin() ) {
+	if ( ! can_see_status_messages() ) {
 		return;
 	}
 
