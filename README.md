@@ -77,7 +77,7 @@ define( 'VALU_SEARCH_UPDATE_API_KEY', '****' );
 define( 'VALU_SEARCH_ENABLE_LIVE_UPDATES', true );
 ```
 
-There a filter for controlling the update process
+There's a filter for controlling the update process
 
 ### `valu_search_should_update`
 
