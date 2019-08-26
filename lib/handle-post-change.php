@@ -20,14 +20,14 @@ function send_request() {
 		'url' => $url,
 	] );
 
-	$endpoint_url = VALU_SEARCH_ENDPOINT . "/customers/" . VALU_SEARCH_CUSTOMER_SLUG . "/update-single-document";
+	$endpoint_url = VALU_SEARCH_ENDPOINT . "/customers/" . VALU_SEARCH_USERNAME . "/update-single-document";
 
 	$response = wp_remote_request(
 		$endpoint_url,
 		[
 			'headers' => [
 				'Content-type' => 'application/json',
-				'X-Valu-Search-Auth' => VALU_SEARCH_CUSTOMER_ADMIN_API_KEY,
+				'X-Valu-Search-Auth' => VALU_SEARCH_UPDATE_API_KEY,
 			],
 			'method'  => 'POST',
 			'body'    => $json,
