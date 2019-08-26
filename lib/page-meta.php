@@ -31,10 +31,10 @@ function render_page_meta_tag() {
 
 	$post_taxonomies = get_the_taxonomies();
 
-	foreach ( $post_taxonomies as $taxonomy ) {
-		$terms = get_the_terms( $post, $taxonomy );
+	foreach ( $post_taxonomies as $taxonomy_key => $taxonomy_value ) {
+		$terms = get_the_terms( $post, $taxonomy_key );
 		foreach ( $terms as $term ) {
-			array_push( $tags, '/wp_taxonomy/' . $taxonomy . '/' . $term );
+			array_push( $tags, '/wp_taxonomy/' . $taxonomy_key . '/' . $term->slug );
 		}
 	}
 
