@@ -76,3 +76,12 @@ define( 'VALU_SEARCH_USERNAME', 'username' );
 define( 'VALU_SEARCH_UPDATE_API_KEY', '****' );
 define( 'VALU_SEARCH_ENABLE_LIVE_UPDATES', true );
 ```
+
+There a filter for controlling the update process
+
+### `valu_search_should_update`
+
+-   `$should_update` (boolean) defaults to true
+-   `$post` (WP_Post) the post of the page being updated
+
+Retrun false to prevent the page from being updated.
