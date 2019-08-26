@@ -35,7 +35,7 @@ function render_page_meta_tag() {
 		'contentSelector' => apply_filters( 'valu_search_content_selector', '.main', $post ),
 		'cleanupSelector' => apply_filters( 'valu_search_cleanup_selector', '', $post ),
 		'title'           => $post->post_title,
-		'language'        => substr( get_locale(), 0, 2 ),
+		'language'        => get_bloginfo( 'language' ),
 		'created'         => get_the_date( 'c', $post ),
 		'modified'        => get_the_modified_date( 'c', $post ),
 		'tags'            => apply_filters( 'valu_search_tags', $tags, $post ),
