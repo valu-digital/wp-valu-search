@@ -5,22 +5,22 @@ namespace ValuSearch;
 
 function render_valu_search_json() {
 
-    // XXX does not work for sites mounted on sub urls
+	// XXX does not work for sites mounted on sub urls
 	if ( '/valu-search.json' !== $_SERVER['REQUEST_URI'] ) {
-        return;
-    }
+		return;
+	}
 
-    $bloginfo = get_blog_info_array();
+	$bloginfo = get_blog_info_array();
 
-    $config = [
-        'siteName' => $bloginfo['blogname'],
-    ];
+	$config = [
+		'siteName' => $bloginfo['blogname'],
+	];
 
-    $config = apply_filters( 'valu_search_site_meta' , $config );
+	$config = apply_filters( 'valu_search_site_meta' , $config );
 
-    header( 'Content-type: application/json' );
-    echo json_encode( $config );
-    die();
+	header( 'Content-type: application/json' );
+	echo json_encode( $config );
+	die();
 
 }
 
