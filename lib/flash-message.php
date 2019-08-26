@@ -23,7 +23,7 @@ function enqueue_flash_message( $message, $type ) {
 
 	$existing_messages[] = [ 'type' => $type, 'message' => $message ];
 
-	set_transient( $key, serialize( $existing_messages ), 120 );
+	set_transient( $key, $existing_messages, 120 );
 }
 
 function get_flash_messages() {
@@ -39,7 +39,7 @@ function get_flash_messages() {
 		return [];
 	}
 
-	return unserialize( $data );
+	return $data;
 }
 
 function clear_flash_messages() {
