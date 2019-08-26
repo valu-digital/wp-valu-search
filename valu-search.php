@@ -8,7 +8,7 @@ Version: 0.1.0
 Plugin URI: https://www.valu.fi
 Description: Expose page metadata for the Search crawler
 Author: Valu Digital
-Author URI: https://bitbucket.org/valudigital/valu-search
+Author URI: https://github.com/valu-digital/wp-valu-search
 */
 
 const ROOT_TAG = '__ROOT';
