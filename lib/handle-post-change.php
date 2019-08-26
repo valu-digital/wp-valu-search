@@ -8,7 +8,33 @@ function can_see_status_messages() {
 	return is_super_admin();
 }
 
-function send_request() {
+
+function handle_post_change( $new_status, $old_status, $post ) {
+
+	if ( $new_status !== 'publish' && $old_status !== 'publish') {
+		return;
+	}
+
+
+	if ( ! $post ) {
+		return;
+	}
+
+	if ( wp_is_post_revision( $post ) ){
+		return;
+	}
+
+	global $pending_update;
+
+	$pending_update = [
+		'post' => $post,
+		'url' => get_generic_permalink($post),
+	];
+}
+
+add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
+
+function send_update() {
 	global $pending_update;
 
 	if ( ! $pending_update ) {
@@ -53,32 +79,7 @@ function send_request() {
 	}
 }
 
-add_action( 'shutdown', __NAMESPACE__ . '\\send_request', 10 );
-
-function handle_post_change( $new_status, $old_status, $post ) {
-
-	if ( $new_status !== 'publish' && $old_status !== 'publish') {
-		return;
-	}
-
-
-	if ( ! $post ) {
-		return;
-	}
-
-	if ( wp_is_post_revision( $post ) ){
-		return;
-	}
-
-	global $pending_update;
-
-	$pending_update = [
-		'post' => $post,
-		'url' => get_generic_permalink($post),
-	];
-}
-
-add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
+add_action( 'shutdown', __NAMESPACE__ . '\\send_update', 10 );
 
 function get_generic_permalink($post){
 
