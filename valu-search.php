@@ -11,8 +11,6 @@ Author: Valu Digital
 Author URI: https://github.com/valu-digital/wp-valu-search
 */
 
-const ROOT_TAG = '__ROOT';
-
 if ( ! defined( 'VALU_SEARCH_ENDPOINT' ) ) {
 	define( 'VALU_SEARCH_ENDPOINT', 'https://api.search.valu.pro/v1-production' );
 }

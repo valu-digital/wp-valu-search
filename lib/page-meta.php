@@ -20,11 +20,6 @@ function render_page_meta_tag() {
 
 	$bloginfo = get_blog_info_array();
 	$blogname = $bloginfo['blogname'];
-	$blog_path = $bloginfo['blog_path'];
-
-	if ( ! $blog_path ) {
-		$blog_path = ROOT_TAG;
-	}
 
 	// Default tags for Valu Search index
 	$tags = [
