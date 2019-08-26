@@ -5,7 +5,7 @@ WordPress plugin for Valu Search.
 This plugin has two features
 
 -   Instructs the Valu Search Crawler how to crawl and scrape the site
--   Send live updates to the Valu Search Index as content creators add, update and delete pages
+-   Sends live updates to the Valu Search Index as content creators add, update and delete pages
 
 This plugin does not provide any UI. It just exposes some config options and filters for developers.
 
