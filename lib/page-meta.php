@@ -29,6 +29,14 @@ function render_page_meta_tag() {
 		$public ? 'public' : 'private',
 	];
 
+	$post_taxonomies = get_the_taxonomies();
+
+	foreach ( $post_taxonomies as $taxonomy ) {
+		$terms = get_the_terms( $post, $taxonomy );
+		foreach ( $terms as $term ) {
+			array_push( $tags, '/wp_taxonomy/' . $taxonomy . '/' . $term );
+		}
+	}
 
 	$meta = [
 		'showInSearch'    => apply_filters( 'valu_search_show_in_search', $public, $post ),
