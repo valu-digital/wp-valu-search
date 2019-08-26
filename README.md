@@ -72,5 +72,7 @@ See all available fields on <https://search.valu.pro/site-meta>
 Add to wp-config:
 
 ```php
-// TODO
+define( 'VALU_SEARCH_USERNAME', 'username' );
+define( 'VALU_SEARCH_UPDATE_API_KEY', '****' );
+define( 'VALU_SEARCH_ENABLE_LIVE_UPDATES', true );
 ```
