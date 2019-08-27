@@ -80,6 +80,7 @@ function send_update() {
 	}
 }
 
+// Send updates on shutdown when we can be sure that post changes have been saved
 add_action( 'shutdown', __NAMESPACE__ . '\\send_update', 10 );
 
 function get_generic_permalink($post){
