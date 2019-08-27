@@ -24,12 +24,12 @@ function can_enable_live_updates() {
 	}
 
 	if ( ! defined( 'VALU_SEARCH_USERNAME' ) ){
-		error_log( 'Valu Search - Cannot live updates: VALU_SEARCH_USERNAME missing' );
+		error_log( 'Valu Search - Cannot enable live updates: VALU_SEARCH_USERNAME missing' );
 		return false;
 	}
 
 	if ( ! defined( 'VALU_SEARCH_UPDATE_API_KEY' ) ){
-		error_log( 'Valu Search - Cannot live updates:  VALU_SEARCH_UPDATE_API_KEY missing' );
+		error_log( 'Valu Search - Cannot enable live updates:  VALU_SEARCH_UPDATE_API_KEY missing' );
 		return false;
 	}
 
