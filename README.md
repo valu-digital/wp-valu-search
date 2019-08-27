@@ -69,7 +69,7 @@ See all available fields on <https://search.valu.pro/site-meta>
 
 Live updates are sent optimistically whenever the plugin thinks the content
 might have changed on a page. The cloud backend then does a scraping request
-on the page to determine what to update actually was (add, update, delete) if
+on the page to determine what the update actually was (add, update, delete) if
 any.
 
 To enable the real time updates add provided credentials to the wp-config:
