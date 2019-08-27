@@ -65,6 +65,7 @@ function send_update() {
 			'body'    => $json,
 			// No need to wait for response when not showing the status
 			'blocking' => can_see_status_messages(),
+			'timeout' => 20,
 		]
 	);
 
