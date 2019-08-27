@@ -32,7 +32,7 @@ function render_page_meta_tag() {
 
 	$meta = [
 		'showInSearch'    => apply_filters( 'valu_search_show_in_search', $public, $post ),
-		'contentSelector' => apply_filters( 'valu_search_content_selector', '.main', $post ),
+		'contentSelector' => apply_filters( 'valu_search_content_selector', '', $post ),
 		'cleanupSelector' => apply_filters( 'valu_search_cleanup_selector', '', $post ),
 		'title'           => $post->post_title,
 		'language'        => substr( get_locale(), 0, 2 ),
