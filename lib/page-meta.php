@@ -29,13 +29,21 @@ function render_page_meta_tag() {
 		$public ? 'public' : 'private',
 	];
 
+	$post_taxonomies = get_the_taxonomies();
+
+	foreach ( $post_taxonomies as $taxonomy_key => $taxonomy_value ) {
+		$terms = get_the_terms( $post, $taxonomy_key );
+		foreach ( $terms as $term ) {
+			array_push( $tags, '/wp_taxonomy/' . $taxonomy_key . '/' . $term->slug );
+		}
+	}
 
 	$meta = [
 		'showInSearch'    => apply_filters( 'valu_search_show_in_search', $public, $post ),
 		'contentSelector' => apply_filters( 'valu_search_content_selector', '', $post ),
 		'cleanupSelector' => apply_filters( 'valu_search_cleanup_selector', '', $post ),
 		'title'           => $post->post_title,
-		'language'        => substr( get_locale(), 0, 2 ),
+		'language'        => get_bloginfo( 'language' ),
 		'created'         => get_the_date( 'c', $post ),
 		'modified'        => get_the_modified_date( 'c', $post ),
 		'tags'            => apply_filters( 'valu_search_tags', $tags, $post ),
