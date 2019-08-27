@@ -83,24 +83,30 @@ function send_update() {
 // Send updates on shutdown when we can be sure that post changes have been saved
 add_action( 'shutdown', __NAMESPACE__ . '\\send_update', 10 );
 
-function get_generic_permalink($post){
+/**
+ * Trashed, draft and private posts have different permalinks than the public
+ * one. This function gets the permalink as if the post were public.
+ */
+function get_public_permalink( $post ) {
 
-	//check first if post is trashed
+	// trashed just has a __trashed suffix
 	if ( preg_match( '/__trashed\/\z/', get_permalink( $post ) ) ) {
-			$url = get_permalink( $post );
-			return preg_replace('/__trashed\/\z/', '/', $url);
-	} else {
-		$my_post = clone $post;
-		$my_post->post_status = 'publish';
-		$my_post->post_name = sanitize_title(
-			$my_post->post_name ? $my_post->post_name : $my_post->post_title,
-			$my_post->ID
-		);
-		return get_permalink( $my_post );
+		$url = get_permalink( $post );
+		return preg_replace('/__trashed\/\z/', '/', $url);
 	}
+
+	// create public clone
+	$clone = clone $post;
+	$clone->post_status = 'publish';
+	// post_name might not be available yet
+	$clone->post_name = sanitize_title(
+		$clone->post_name ? $clone->post_name : $clone->post_title,
+		$clone->ID
+	);
+
+	return get_permalink( $clone );
 }
 
-add_action( 'admin_notices', __NAMESPACE__ . '\\show_admin_message_about_valu_search_sync' );
 
 /**
  *  Handles the messages to be shown by admin notice hook.
