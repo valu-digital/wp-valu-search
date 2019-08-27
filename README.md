@@ -89,4 +89,4 @@ There's a filter for controlling the update process
 -   `$should_update` (boolean) defaults to true
 -   `$post` (WP_Post) the post of the page being updated
 
-Retrun false to prevent the page from being updated.
+Return false to prevent the page from being updated.
