@@ -10,17 +10,15 @@ function can_see_status_messages() {
 
 
 function handle_post_change( $new_status, $old_status, $post ) {
+	if ( ! $post ) {
+		return;
+	}
 
 	if ( $new_status !== 'publish' && $old_status !== 'publish') {
 		return;
 	}
 
-
-	if ( ! $post ) {
-		return;
-	}
-
-	if ( wp_is_post_revision( $post ) ){
+	if ( wp_is_post_revision( $post ) ) {
 		return;
 	}
 
@@ -111,7 +109,7 @@ function get_public_permalink( $post ) {
 /**
  *  Handles the messages to be shown by admin notice hook.
  */
-function show_admin_message_about_valu_search_sync() {
+function show_sync_notice() {
 	if ( ! can_see_status_messages() ) {
 		return;
 	}
@@ -126,6 +124,8 @@ function show_admin_message_about_valu_search_sync() {
 
 	clear_flash_messages();
 }
+
+add_action( 'admin_notices', __NAMESPACE__ . '\\show_sync_notice' );
 
 function success_message( $message ) {
 	?>
