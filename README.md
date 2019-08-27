@@ -45,7 +45,9 @@ Parameters
 -   `$tags` (string[]) Array of tags
 -   `$post` (WP_Post) the post of the page being indexed
 
-List of tags the page gets indexed with.
+List of tags the page gets indexed with. By default the post type, taxonomy
+terms, static `wordpress` and `public` / `private` tags are added. These tags
+can be used to build custom filtering UIs.
 
 ### `valu_search_page_meta`
 
