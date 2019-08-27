@@ -24,32 +24,32 @@ function handle_post_change( $new_status, $old_status, $post ) {
 		return;
 	}
 
-	global $pending_update;
-
-	$pending_update = [
+	// The post data might not be actually saved to the database at this point.
+	// Defer update sending using a global.
+	global $valu_search_pending_update;
+	$valu_search_pending_update = [
 		'post' => $post,
-		'url' => get_generic_permalink($post),
+		'url' => get_public_permalink( $post ),
 	];
 }
 
 add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
 
 function send_update() {
-	global $pending_update;
+	global $valu_search_pending_update;
 
-	if ( ! $pending_update ) {
+	if ( ! $valu_search_pending_update ) {
 		return;
 	}
 
-	$should_update = apply_filters( 'valu_search_should_update' , true, $pending_update['post'] );
+	$should_update = apply_filters( 'valu_search_should_update' , true, $valu_search_pending_update['post'] );
 
 	if ( ! $should_update ) {
 		return;
 	}
 
-
 	$json = wp_json_encode( [
-		'url' => $pending_update['url'],
+		'url' => $valu_search_pending_update['url'],
 	] );
 
 	$endpoint_url = VALU_SEARCH_ENDPOINT . "/customers/" . VALU_SEARCH_USERNAME . "/update-single-document";
