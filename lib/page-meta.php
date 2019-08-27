@@ -43,7 +43,6 @@ function render_page_meta_tag() {
 		'contentSelector' => apply_filters( 'valu_search_content_selector', '', $post ),
 		'cleanupSelector' => apply_filters( 'valu_search_cleanup_selector', '', $post ),
 		'title'           => $post->post_title,
-		'language'        => get_bloginfo( 'language' ),
 		'created'         => get_the_date( 'c', $post ),
 		'modified'        => get_the_modified_date( 'c', $post ),
 		'tags'            => apply_filters( 'valu_search_tags', $tags, $post ),
@@ -52,6 +51,10 @@ function render_page_meta_tag() {
 	// Use the post language if using polylang instead of the blog locale.
 	if ( function_exists( 'pll_get_post_language' ) ) {
 		$meta['language'] = pll_get_post_language( $post->ID, 'slug' );
+	}
+
+	if ( empty( $meta['language'] ) ) {
+		$meta['language'] = get_bloginfo( 'language' );
 	}
 
 	// Allow any custom modifications
