@@ -14,10 +14,13 @@ function handle_post_change( $new_status, $old_status, $post ) {
 		return;
 	}
 
+	// We can bail out if the status is not publish or is not transitioning from or
+	// to it eg. it's a draft or draft being moved to trash for example
 	if ( $new_status !== 'publish' && $old_status !== 'publish') {
 		return;
 	}
 
+	// Revision are not public
 	if ( wp_is_post_revision( $post ) ) {
 		return;
 	}
@@ -31,6 +34,8 @@ function handle_post_change( $new_status, $old_status, $post ) {
 	];
 }
 
+// This is called always when post is being saved even when the post status does
+// not actually change.
 add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
 
 function send_update() {
