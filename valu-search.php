@@ -17,17 +17,19 @@ if ( ! defined( 'VALU_SEARCH_ENDPOINT' ) ) {
 
 function can_enable_live_updates() {
 
+	if ( ! defined( 'VALU_SEARCH_ENABLE_LIVE_UPDATES' ) ) {
+		return false;
+	} else if ( ! VALU_SEARCH_ENABLE_LIVE_UPDATES ) {
+		return false;
+	}
+
 	if ( ! defined( 'VALU_SEARCH_USERNAME' ) ){
+		error_log( 'Valu Search - Cannot live updates: VALU_SEARCH_USERNAME missing' );
 		return false;
 	}
 
 	if ( ! defined( 'VALU_SEARCH_UPDATE_API_KEY' ) ){
-		return false;
-	}
-
-	if ( ! defined( 'VALU_SEARCH_ENABLE_LIVE_UPDATES' ) ) {
-		return false;
-	} else if ( ! VALU_SEARCH_ENABLE_LIVE_UPDATES ) {
+		error_log( 'Valu Search - Cannot live updates:  VALU_SEARCH_UPDATE_API_KEY missing' );
 		return false;
 	}
 
