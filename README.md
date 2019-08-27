@@ -1,22 +1,17 @@
 # Valu Search for WordPress
 
-WordPress plugin for Valu Search.
+WordPress plugin for [Valu Search](https://search.valu.pro).
 
 This plugin has two features
 
--   Instructs the Valu Search Crawler how to crawl and scrape the site
--   Sends live updates to the Valu Search Index as content creators add, update and delete pages
+-   Instructs the Valu Search Crawler on how to crawl and scrape the site
+-   Sends [live updates](#live-updates) to the Valu Search Index as content
+    creators add, update and delete pages
 
-This plugin does not provide any UI. It just exposes some config options and filters for developers.
+This plugin does not provide any UI. It just exposes some config options and
+filters for developers.
 
 ## Filters
-
-### `valu_search_show_in_search`
-
-Parameters
-
--   `$show` (boolean) whether to index the page at all
--   `$post` (WP_Post) the post of the page being indexed
 
 ### `valu_search_content_selector`
 
@@ -27,10 +22,6 @@ Parameters
 
 Multiple selectors can be separated by comma. Ex. `.content,.main`
 
-List of all supported selectors can be found from [here](css-select).
-
-[css-select]: https://www.npmjs.com/package/css-select#supported-selectors
-
 ### `valu_search_cleanup_selector`
 
 Parameters
@@ -39,6 +30,13 @@ Parameters
 -   `$post` (WP_Post) The post of the page being indexed
 
 Remove content from selected elements.
+
+### `valu_search_show_in_search`
+
+Parameters
+
+-   `$show` (boolean) whether to index the page at all
+-   `$post` (WP_Post) the post of the page being indexed
 
 ### `valu_search_tags`
 
@@ -69,7 +67,7 @@ See all available fields on <https://search.valu.pro/site-meta>
 
 # Live Updates
 
-Add to wp-config:
+To enable the real time updates add provided credentials to the wp-config:
 
 ```php
 define( 'VALU_SEARCH_USERNAME', 'username' );
