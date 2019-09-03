@@ -4,8 +4,6 @@ namespace ValuSearch;
 
 require_once __DIR__ . '/flash-message.php';
 
-$GLOBALS['valu_search_pending_update_array'] = array();
-
 function can_see_status_messages() {
 	return is_super_admin();
 }
@@ -29,13 +27,14 @@ function handle_post_change( $new_status, $old_status, $post ) {
 
 	// The post data might not be actually saved to the database at this point.
 	// Defer update sending using a global.
+	global $valu_search_pending_update_array;
 
-	$valu_search_pending_update = [
+	$valu_search_pending_update = array(
 		'post' => $post,
 		'url' => get_public_permalink( $post ),
-	];
+	);
 
-	$GLOBALS['valu_search_pending_update_array'][ $valu_search_pending_update['url'] ] = $valu_search_pending_update['post'];
+	$valu_search_pending_update_array[ $valu_search_pending_update['url'] ] = $valu_search_pending_update['post'];
 
 }
 
@@ -44,24 +43,23 @@ function handle_post_change( $new_status, $old_status, $post ) {
 add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
 
 function send_update() {
-
-	$valu_search_pending_update_array = $GLOBALS['valu_search_pending_update_array'];
+	global $valu_search_pending_update_array;
 
 	if ( ! $valu_search_pending_update_array ) {
 			return;
 	}
 
 	$url_array = array();
-
 	foreach ( $valu_search_pending_update_array as $url => $post ) {
 		$should_update = apply_filters( 'valu_search_should_update', true, $post );
 
-		if ( $should_update ) {
+		if ( $should_update && 10000 > count( $url_array ) ) {
 			array_push( $url_array, $url );
 		}
+
 	}
 
-	$json = wp_json_encode( $url_array );
+	$json = wp_json_encode( [ 'urls' => $url_array ] );
 
 	$endpoint_url = VALU_SEARCH_ENDPOINT . '/customers/' . VALU_SEARCH_USERNAME . '/update-documents';
 
