@@ -143,7 +143,7 @@ add_action( 'admin_notices', __NAMESPACE__ . '\\show_sync_notice' );
 function success_message( $message ) {
 	?>
 	<div class="notice notice-success is-dismissible">
-		<p><?php echo esc_html( $message ) ?></p>
+		<p><?php echo esc_html( $message ); ?></p>
 	</div>
 	<?php
 }
