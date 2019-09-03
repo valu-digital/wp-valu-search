@@ -18,7 +18,7 @@ function handle_post_change( $new_status, $old_status, $post ) {
 
 	// We can bail out if the status is not publish or is not transitioning from or
 	// to it eg. it's a draft or draft being moved to trash for example
-	if ( $new_status !== 'publish' && $old_status !== 'publish') {
+	if ( 'publish' !== $new_status && 'publish' !== $old_status ) {
 		return;
 	}
 
@@ -85,7 +85,7 @@ function send_update() {
 	}
 
 	if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
-		enqueue_flash_message( "Search index update success!", 'success' );
+		enqueue_flash_message( 'Search index update success!', 'success' );
 	} else {
 		enqueue_flash_message( $response, 'error' );
 	}
@@ -103,7 +103,7 @@ function get_public_permalink( $post ) {
 	// trashed just has a __trashed suffix
 	if ( preg_match( '/__trashed\/\z/', get_permalink( $post ) ) ) {
 		$url = get_permalink( $post );
-		return preg_replace('/__trashed\/\z/', '/', $url);
+		return preg_replace( '/__trashed\/\z/', '/', $url );
 	}
 
 	// create public clone
@@ -128,7 +128,7 @@ function show_sync_notice() {
 	}
 
 	foreach ( get_flash_messages() as $message ) {
-		if ( "success" === $message['type'] ) {
+		if ( 'success' === $message['type'] ) {
 			success_message( $message['message'] );
 		} else {
 			error_message( $message['message'] );
@@ -142,18 +142,18 @@ add_action( 'admin_notices', __NAMESPACE__ . '\\show_sync_notice' );
 
 function success_message( $message ) {
 	?>
-		<div class="notice notice-success is-dismissible">
-			<p><?php echo esc_html( $message ) ?></p>
-		</div>
+	<div class="notice notice-success is-dismissible">
+		<p><?php echo esc_html( $message ) ?></p>
+	</div>
 	<?php
 }
 
 function error_message( $error ) {
 	?>
-		<div class="notice notice-error is-dismissible">
-			<p>There was an error reindexing the page!
-				<?php var_dump( $error ); ?>
-			</p>
-		</div>
+	<div class="notice notice-error is-dismissible">
+		<p>There was an error reindexing the page!
+			<?php var_dump( $error ); ?>
+		</p>
+	</div>
 	<?php
 }
