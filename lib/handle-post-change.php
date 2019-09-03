@@ -4,6 +4,8 @@ namespace ValuSearch;
 
 require_once __DIR__ . '/flash-message.php';
 
+$GLOBALS['valu_search_pending_update_array'] = array();
+
 function can_see_status_messages() {
 	return is_super_admin();
 }
@@ -27,11 +29,14 @@ function handle_post_change( $new_status, $old_status, $post ) {
 
 	// The post data might not be actually saved to the database at this point.
 	// Defer update sending using a global.
-	global $valu_search_pending_update;
+
 	$valu_search_pending_update = [
 		'post' => $post,
 		'url' => get_public_permalink( $post ),
 	];
+
+	$GLOBALS['valu_search_pending_update_array'][ $valu_search_pending_update['url'] ] = $valu_search_pending_update['post'];
+
 }
 
 // This is called always when post is being saved even when the post status does
@@ -39,23 +44,26 @@ function handle_post_change( $new_status, $old_status, $post ) {
 add_action( 'transition_post_status', __NAMESPACE__ . '\\handle_post_change', 10, 3 );
 
 function send_update() {
-	global $valu_search_pending_update;
 
-	if ( ! $valu_search_pending_update ) {
-		return;
+	$valu_search_pending_update_array = $GLOBALS['valu_search_pending_update_array'];
+
+	if ( ! $valu_search_pending_update_array ) {
+			return;
 	}
 
-	$should_update = apply_filters( 'valu_search_should_update' , true, $valu_search_pending_update['post'] );
+	$url_array = array();
 
-	if ( ! $should_update ) {
-		return;
+	foreach ( $valu_search_pending_update_array as $url => $post ) {
+		$should_update = apply_filters( 'valu_search_should_update', true, $post );
+
+		if ( $should_update ) {
+			array_push( $url_array, $url );
+		}
 	}
 
-	$json = wp_json_encode( [
-		'url' => $valu_search_pending_update['url'],
-	] );
+	$json = wp_json_encode( $url_array );
 
-	$endpoint_url = VALU_SEARCH_ENDPOINT . "/customers/" . VALU_SEARCH_USERNAME . "/update-single-document";
+	$endpoint_url = VALU_SEARCH_ENDPOINT . '/customers/' . VALU_SEARCH_USERNAME . '/update-documents';
 
 	$response = wp_remote_request(
 		$endpoint_url,
