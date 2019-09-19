@@ -1,0 +1,22 @@
+{
+    "name": "valu-digital/valu-search",
+    "version": "1.0.0",
+    "description": "WordPress plugin for Valu Search",
+    "type": "wordpress-plugin",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Esa-Matti Suuronen ",
+            "email": "esa-matti.suuronen@valu.fi",
+            "role": "developer"
+        }
+    ],
+    "require": {
+        "composer/installers": "~1.0"
+    },
+    "scripts": {},
+    "support": {
+        "issues": "https://github.com/valu-digital/wp-valu-search/issues",
+        "source": "https://github.com/valu-digital/wp-valu-search"
+    }
+}
