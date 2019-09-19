@@ -29,12 +29,7 @@ function handle_post_change( $new_status, $old_status, $post ) {
 	// Defer update sending using a global.
 	global $valu_search_pending_update_array;
 
-	$valu_search_pending_update = array(
-		'post' => $post,
-		'url' => get_public_permalink( $post ),
-	);
-
-	$valu_search_pending_update_array[ $valu_search_pending_update['url'] ] = $valu_search_pending_update['post'];
+	$valu_search_pending_update_array[ get_public_permalink( $post ) ] = $post;
 
 }
 
