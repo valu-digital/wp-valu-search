@@ -2,19 +2,7 @@
 
 namespace ValuSearch;
 
-function render_page_meta_tag() {
-
-	// Valu Search Crawler adds ?_vsid=timestamp query string for all requests. We
-	// can bail out if it is not present.
-	if ( ! isset( $_GET['_vsid'] ) ) {
-		return;
-	}
-
-	global $post;
-
-	if ( ! $post ) {
-		return;
-	}
+function get_page_meta( \WP_post $post ) {
 
 	$public = $post->post_status === 'publish';
 
@@ -66,9 +54,26 @@ function render_page_meta_tag() {
 		return;
 	}
 
-	$json = wp_json_encode( $meta );
-	echo "<script type='text/json' id='valu-search'>$json</script>";
+	return $meta;
 
+
+}
+
+function render_page_meta_tag() {
+	// Valu Search Crawler adds ?_vsid=timestamp query string for all requests. We
+	// can bail out if it is not present.
+	if ( ! isset( $_GET['_vsid'] ) ) {
+		return;
+	}
+
+	global $post;
+
+	if ( ! $post ) {
+		return;
+	}
+
+	$json = wp_json_encode( get_page_meta( $post ) );
+	echo "<script type='application/json' id='valu-search'>$json</script>";
 }
 
 add_action( 'wp_head', __NAMESPACE__ . '\\render_page_meta_tag', 10 );
