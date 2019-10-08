@@ -77,3 +77,22 @@ function render_page_meta_tag() {
 }
 
 add_action( 'wp_head', __NAMESPACE__ . '\\render_page_meta_tag', 10 );
+
+function headup_tag( $tags, $post ) {
+	$json = wp_json_encode( get_page_meta( $post ) );
+
+	$tags[] = [
+		'tag' => 'script',
+		'attrs' => [
+			'id' => 'valu-search',
+			'type' => 'application/json',
+			'dangerouslySetInnerHTML' => [
+				'__html' => $json
+			]
+		],
+	];
+
+	return $tags;
+}
+
+add_filter( 'headup_head_tags', __NAMESPACE__ . '\\headup_tag', 10, 2 );
