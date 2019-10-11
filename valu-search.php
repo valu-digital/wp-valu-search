@@ -4,7 +4,7 @@ namespace ValuSearch;
 
 /*
 Plugin Name: Valu Search
-Version: 0.3.0
+Version: 0.3.1
 Plugin URI: https://www.valu.fi
 Description: Expose page metadata for the Search crawler
 Author: Valu Digital
