@@ -52,7 +52,7 @@ sed -E -i  "" "s/(.*Version:) .*/\1 ${new_version}/" $version_file
 jq ".version = \"${new_version}\"" composer.json > next.json
 mv next.json composer.json
 
-git commit -m "Release v${new_version}" $version_file
+git commit -m "Release v${new_version}" $version_file composer.json
 git tag -a "v${new_version}" -m "Release v${new_version}"
 
 git push origin master:master
