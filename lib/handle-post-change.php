@@ -54,6 +54,10 @@ function send_update() {
 
 	}
 
+	if(!$url_array){
+		return;
+	}
+
 	$json = wp_json_encode( [ 'urls' => $url_array ] );
 
 	$endpoint_url = VALU_SEARCH_ENDPOINT . '/customers/' . VALU_SEARCH_USERNAME . '/update-documents';

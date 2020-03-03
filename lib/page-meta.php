@@ -9,11 +9,17 @@ function get_page_meta( \WP_post $post ) {
 	$bloginfo = get_blog_info_array();
 	$blogname = $bloginfo['blogname'];
 
+	$url_parts = parse_url( home_url() );
+	$domain = $url_parts[ 'host' ];
+
 	// Default tags for Valu Search index
 	$tags = [
 		'wordpress',
+		'domain/' . $domain . '/' . 'wordpress',
 		'wp_post_type/' . $post->post_type,
+		'domain/' . $domain . '/' . 'wp_post_type/' . $post->post_type,
 		'wp_blog_name/' . sanitize_title( $blogname ),
+		'domain/' . $domain . '/' . 'wp_blog_name/' . sanitize_title( $blogname ),
 		$public ? 'public' : 'private',
 	];
 
@@ -23,7 +29,8 @@ function get_page_meta( \WP_post $post ) {
 		if ( 'post_translations' !== $taxonomy_key ) {
 			$terms = get_the_terms( $post, $taxonomy_key );
 			foreach ( $terms as $term ) {
-				array_push( $tags, 'wp_taxonomy/' . $taxonomy_key . '/' . $term->slug );
+					array_push( $tags, 'domain/' . $domain . '/' . 'wp_taxonomy/' . $taxonomy_key . '/' . $term->slug );
+					array_push( $tags, 'wp_taxonomy/' . $taxonomy_key . '/' . $term->slug );
 			}
 		}
 	}
@@ -32,10 +39,12 @@ function get_page_meta( \WP_post $post ) {
 		'showInSearch'    => apply_filters( 'valu_search_show_in_search', $public, $post ),
 		'contentSelector' => apply_filters( 'valu_search_content_selector', '', $post ),
 		'cleanupSelector' => apply_filters( 'valu_search_cleanup_selector', '', $post ),
-		'title'           => $post->post_title,
+		'title'           => is_archive() ? get_the_archive_title() : $post->post_title,
 		'created'         => get_the_date( 'c', $post ),
 		'modified'        => get_the_modified_date( 'c', $post ),
 		'tags'            => apply_filters( 'valu_search_tags', $tags, $post ),
+		'superwords'	  => apply_filters( 'valu_search_superwords', [], $post ),
+		'preview'		  => apply_filters( 'valu_search_preview', '', $post),
 	];
 
 	// Use the post language if using polylang instead of the blog locale.
@@ -44,7 +53,7 @@ function get_page_meta( \WP_post $post ) {
 	}
 
 	if ( empty( $meta['language'] ) ) {
-		$meta['language'] = get_bloginfo( 'language' );
+		$meta['language'] = substr( get_bloginfo( 'language' ), 0, 2);
 	}
 
 	// Allow any custom modifications

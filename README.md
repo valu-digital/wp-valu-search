@@ -49,6 +49,26 @@ List of tags the page gets indexed with. By default the post type, taxonomy
 terms, static `wordpress` and `public` / `private` tags are added. These tags
 can be used to build custom filtering UIs.
 
+#### `valu_search_preview`
+
+Parameters
+
+-   `$preview`(string) preview string
+-   `$post` (WP_Post) the post of the page being indexed
+
+Custom preview content of page shown in search results.
+
+#### `valu_search_superwords`
+
+Parameters
+
+-   `$superwords`(string[]) Array of superwords
+-   `$post` (WP_Post) the post of the page being indexed
+
+List of superwords indexed with the page. By default empty array.
+Superwords can be used to mark page as an important search result for the
+superwords given. Search results with matching superwords are shown first in results.
+
 ### `valu_search_page_meta`
 
 -   `$meta` (assoc array)
