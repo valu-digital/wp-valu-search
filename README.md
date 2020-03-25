@@ -11,6 +11,17 @@ This plugin has two features
 This plugin does not provide any UI. It just exposes some config options and
 filters for developers.
 
+## Installation
+
+It's on [Packagist](https://packagist.org/packages/valu/wp-valu-search)
+
+    composer require valu/wp-valu-search
+
+If not using composer download a .zip from the [releases][] page and extract it
+to `wp-content/plugins`.
+
+[releases]: https://github.com/valu-digital/wp-valu-search/releases
+
 ## Filters
 
 ### `valu_search_content_selector`
