@@ -5,7 +5,8 @@ namespace ValuSearch;
 require_once __DIR__ . '/flash-message.php';
 
 function can_see_status_messages() {
-	return is_super_admin();
+	$show_notices = apply_filters('valu_search_show_admin_notices', false);
+	return $show_notices;
 }
 
 
@@ -77,15 +78,21 @@ function send_update() {
 		]
 	);
 
+	if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+		$msg = 'Search index update success!';
+		$status = 'success';
+	} else {
+		$msg = $response;
+		$status = 'error';
+	}
+
+	do_action('valu_search_live_update_result', $status, $msg);
+
 	if ( ! can_see_status_messages() ) {
 		return;
 	}
 
-	if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
-		enqueue_flash_message( 'Search index update success!', 'success' );
-	} else {
-		enqueue_flash_message( $response, 'error' );
-	}
+	enqueue_flash_message( $msg, $status );
 }
 
 // Send updates on shutdown when we can be sure that post changes have been saved
