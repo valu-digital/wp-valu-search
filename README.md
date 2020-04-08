@@ -121,3 +121,17 @@ There's a filter for controlling the update process
 -   `$post` (WP_Post) the post of the page being updated
 
 Return false to prevent the page from being updated.
+
+### 'valu_search_show_admin_notices'
+
+-   `$show_notices` (boolean) defaults to false
+
+Return true to enable notices about live updates in wp-admin
+
+## Actions
+
+### 'valu_search_live_update_result'
+
+Action is fired everytime live update request is done
+
+-   `$response` return type of `wp_remote_request()` (array|WP_Error)

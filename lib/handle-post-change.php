@@ -5,7 +5,8 @@ namespace ValuSearch;
 require_once __DIR__ . '/flash-message.php';
 
 function can_see_status_messages() {
-	return is_super_admin();
+	$show_notices = apply_filters('valu_search_show_admin_notices', false);
+	return $show_notices;
 }
 
 
@@ -71,21 +72,25 @@ function send_update() {
 			],
 			'method'  => 'POST',
 			'body'    => $json,
-			// No need to wait for response when not showing the status
-			'blocking' => can_see_status_messages(),
 			'timeout' => 20,
 		]
 	);
+
+	do_action('valu_search_live_update_result', $response);
+
+	if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+		$msg = 'Search index update success!';
+		$status = 'success';
+	} else {
+		$msg = $response->get_error_message();
+		$status = 'error';
+	}
 
 	if ( ! can_see_status_messages() ) {
 		return;
 	}
 
-	if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
-		enqueue_flash_message( 'Search index update success!', 'success' );
-	} else {
-		enqueue_flash_message( $response, 'error' );
-	}
+	enqueue_flash_message( $msg, $status );
 }
 
 // Send updates on shutdown when we can be sure that post changes have been saved
