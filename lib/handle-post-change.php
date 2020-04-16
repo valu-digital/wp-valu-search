@@ -78,16 +78,24 @@ function send_update() {
 
 	do_action('valu_search_live_update_result', $response);
 
-	if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+	if ( ! can_see_status_messages() ) {
+		return;
+	}
+
+	$status_code = wp_remote_retrieve_response_code( $response );
+
+	if ( 200 === $status_code ) {
 		$msg = 'Search index update success!';
 		$status = 'success';
 	} else {
-		$msg = $response->get_error_message();
+		$msg = "There was an error, this error should be overwritten by the real error";
+		if ( is_wp_error( $response ) ) {
+			$msg = $response->get_error_message();
+		} else {
+			$body = wp_remote_retrieve_body( $response );
+			$msg = $status_code . '\n' . $body;
+		}
 		$status = 'error';
-	}
-
-	if ( ! can_see_status_messages() ) {
-		return;
 	}
 
 	enqueue_flash_message( $msg, $status );
