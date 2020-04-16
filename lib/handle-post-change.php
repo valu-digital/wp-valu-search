@@ -91,7 +91,7 @@ function send_update() {
 		$msg = "There was an error, this error should be overwritten by the real error";
 		if ( is_wp_error( $response ) ) {
 			$msg = $response->get_error_message();
-		} else if ( $status_code !== 200 ){
+		} else {
 			$body = wp_remote_retrieve_body( $response );
 			$msg = $status_code . '\n' . $body;
 		}
