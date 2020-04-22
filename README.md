@@ -49,6 +49,27 @@ Parameters
 -   `$show` (boolean) whether to index the page at all
 -   `$post` (WP_Post) the post of the page being indexed
 
+### `valu_search_title`
+
+Parameters
+
+-   `$title`(string) if the post being indexed is archive, the archive title otherwise the post title
+-   `$post` (WP_Post) the post of the page being indexed
+
+### `valu_search_created`
+
+Parameters
+
+-   `$created` (date) the created date of page being indexed
+-   `$post` (WP_Post) the post of the page being indexed
+
+### `valu_search_modified`
+
+Parameters
+
+-   `$modified` (date) the modified date of page being indexed
+-   `$post` (WP_Post) the post of the page being indexed
+
 ### `valu_search_tags`
 
 Parameters

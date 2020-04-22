@@ -35,13 +35,17 @@ function get_page_meta( \WP_post $post ) {
 		}
 	}
 
+	$title = wp_specialchars_decode( is_archive() ? get_the_archive_title() : $post->post_title);
+	$created = get_the_date( 'c', $post );
+	$modified = get_the_modified_date( 'c', $post );
+
 	$meta = [
 		'showInSearch'    => apply_filters( 'valu_search_show_in_search', $public, $post ),
 		'contentSelector' => apply_filters( 'valu_search_content_selector', '', $post ),
 		'cleanupSelector' => apply_filters( 'valu_search_cleanup_selector', '', $post ),
-		'title'           => is_archive() ? get_the_archive_title() : $post->post_title,
-		'created'         => get_the_date( 'c', $post ),
-		'modified'        => get_the_modified_date( 'c', $post ),
+		'title'           => apply_filters( 'valu_search_title', $title, $post ),
+		'created'         => apply_filters( 'valu_search_created', $created, $post ),
+		'modified'        => apply_filters( 'valu_search_modified', $modified, $post ),
 		'tags'            => apply_filters( 'valu_search_tags', $tags, $post ),
 		'superwords'	  => apply_filters( 'valu_search_superwords', [], $post ),
 		'preview'		  => apply_filters( 'valu_search_preview', '', $post),
