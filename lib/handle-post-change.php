@@ -47,7 +47,7 @@ function send_update() {
 
 	$url_array = array();
 	foreach ( $valu_search_pending_update_array as $url => $post ) {
-		$should_update = apply_filters( 'valu_search_should_update', true, $post );
+		$should_update = apply_filters( 'valu_search_should_update', php_sapi_name() !== 'cli', $post );
 
 		if ( $should_update && 10000 > count( $url_array ) ) {
 			array_push( $url_array, $url );

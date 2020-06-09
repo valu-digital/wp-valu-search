@@ -138,7 +138,9 @@ There's a filter for controlling the update process
 
 ### `valu_search_should_update`
 
--   `$should_update` (boolean) defaults to true
+Parameters
+
+-   `$should_update` (boolean) defaults to value of `php_sapi_name() !== 'cli'`
 -   `$post` (WP_Post) the post of the page being updated
 
 Return false to prevent the page from being updated.
