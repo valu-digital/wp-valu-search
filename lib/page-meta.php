@@ -23,7 +23,7 @@ function get_page_meta( \WP_post $post ) {
 		$public ? 'public' : 'private',
 	];
 
-	$post_taxonomies = get_the_taxonomies();
+	$post_taxonomies = get_the_taxonomies($post->ID);
 
 	foreach ( $post_taxonomies as $taxonomy_key => $taxonomy_value ) {
 		if ( 'post_translations' !== $taxonomy_key ) {
