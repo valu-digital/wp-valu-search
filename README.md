@@ -134,7 +134,23 @@ define( 'VALU_SEARCH_UPDATE_API_KEY', '****' );
 define( 'VALU_SEARCH_ENABLE_LIVE_UPDATES', true );
 ```
 
-There's a filter for controlling the update process
+There's a filter for controlling the update process.
+
+In the event of changing posts/pages permalink the new url gets indexed, but
+the old url remains in the index until the next full site crawl.
+
+```
+/old-url --> /new-url // new url is reindexed
+```
+
+In the event that the changed page was of a hierarchical post type, only the
+updated page gets reindexed. Other pages that depend on slug of the changed page,
+eg. child pages get updated during next crawl.
+
+```
+/old-url --> /new-url // new-url is reindexed
+/old-url/sub-page --> /new-url/sub-page // new-url/sub-page is not reindexed.
+```
 
 ### `valu_search_should_update`
 
