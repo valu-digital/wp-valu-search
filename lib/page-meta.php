@@ -12,6 +12,10 @@ function get_page_meta( \WP_post $post ) {
 	$url_parts = parse_url( home_url() );
 	$domain = $url_parts[ 'host' ];
 
+	if (\class_exists('\Headup\Headup') && \Headup\Headup::is_active()) {
+		$domain = \Headup\Headup::get_public_host();
+	}
+
 	// Default tags for Valu Search index
 	$tags = [
 		'wordpress',
@@ -91,7 +95,18 @@ function render_page_meta_tag() {
 
 add_action( 'wp_head', __NAMESPACE__ . '\\render_page_meta_tag', 10 );
 
-function headup_tag( $tags, $post ) {
+function headup_tag( $tags, $type, $post ) {
+	// Suppport old headup version where the second arg is the post
+	if ($type instanceof \WP_Post) {
+		$post = $type;
+		$type = 'post';
+	}
+
+	// This is only for post page. Eg. skip archives.
+	if ('post' !== $type) {
+		return $tags;
+	}
+
 	$json = wp_json_encode( get_page_meta( $post ) );
 
 	$tags[] = [
@@ -108,4 +123,4 @@ function headup_tag( $tags, $post ) {
 	return $tags;
 }
 
-add_filter( 'headup_head_tags', __NAMESPACE__ . '\\headup_tag', 10, 2 );
+add_filter( 'headup_head_tags', __NAMESPACE__ . '\\headup_tag', 10, 3 );
