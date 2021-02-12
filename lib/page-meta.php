@@ -44,7 +44,7 @@ function get_page_meta( \WP_post $post ) {
 	$modified = get_the_modified_date( 'c', $post );
 
 	$meta = [
-		'showInSearch'    => apply_filters( 'valu_search_show_in_search', $public, $post ),
+		'showInSearch'    => apply_filters( 'valu_search_show_in_search', is_archive() ? false : $public, $post ),
 		'contentSelector' => apply_filters( 'valu_search_content_selector', '', $post ),
 		'cleanupSelector' => apply_filters( 'valu_search_cleanup_selector', '', $post ),
 		'title'           => apply_filters( 'valu_search_title', $title, $post ),

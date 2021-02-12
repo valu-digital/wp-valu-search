@@ -49,6 +49,8 @@ Parameters
 -   `$show` (boolean) whether to index the page at all
 -   `$post` (WP_Post) the post of the page being indexed
 
+`$show` is false if post status is not public OR if the post is archive.
+
 ### `valu_search_title`
 
 Parameters
