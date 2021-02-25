@@ -27,10 +27,12 @@ function get_page_meta( \WP_post $post ) {
 		$public ? 'public' : 'private',
 	];
 
+	$public_taxonomies = get_taxonomies(['public' => true], 'names');
 	$post_taxonomies = get_the_taxonomies($post->ID);
 
 	foreach ( $post_taxonomies as $taxonomy_key => $taxonomy_value ) {
-		if ( 'post_translations' !== $taxonomy_key ) {
+		// only expose public taxonomies as tags
+		if ( in_array( $taxonomy_key, $public_taxonomies )) {
 			$terms = get_the_terms( $post, $taxonomy_key );
 			foreach ( $terms as $term ) {
 					array_push( $tags, 'domain/' . $domain . '/' . 'wp_taxonomy/' . $taxonomy_key . '/' . $term->slug );
