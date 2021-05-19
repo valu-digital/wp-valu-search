@@ -83,14 +83,41 @@ List of tags the page gets indexed with. By default the post type, taxonomy
 terms, static `wordpress` and `public` / `private` tags are added. These tags
 can be used to build custom filtering UIs.
 
-#### `valu_search_preview`
+#### `valu_search_custom_fields`
 
 Parameters
 
--   `$preview`(string) preview string
+-   `$custom_fields_object` ({'date': {key: value, ...}, 'keyword':{'key':'value', ...}, 'number': {'key':'value', ...}}) Object containing all custom fields objects
 -   `$post` (WP_Post) the post of the page being indexed
 
-Custom preview content of page shown in search results.
+Custom fields related to the page.
+
+#### `valu_search_custom_fields_date`
+
+Parameters
+
+-   `$custom_fields_date_object` ({key: value, ...}) Object containing custom date field key value pairs
+-   `$post` (WP_Post) the post of the page being indexed
+
+Custom date fields related to the page. e.g. eventStart, eventEnd
+
+##### `valu_search_custom_fields_keyword`
+
+Parameters
+
+-   `$custom_fields_keyword_object` ({key: value, ...}) Object containing custom keyword field key value pairs
+-   `$post` (WP_Post) the post of the page being indexed
+
+Custom keyword fields related to the page. e.g. productPreview, productId
+
+##### `valu_search_custom_fields_number`
+
+Parameters
+
+-   `$custom_fields_number_object` ({key: value, ...}) Object containing custom keyword field key value pairs
+-   `$post` (WP_Post) the post of the page being indexed
+
+Custom number fields related to the page. e.g. productPrice
 
 #### `valu_search_superwords`
 

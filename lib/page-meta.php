@@ -45,6 +45,12 @@ function get_page_meta( \WP_post $post ) {
 	$created = get_the_date( 'c', $post );
 	$modified = get_the_modified_date( 'c', $post );
 
+	$custom_fields = (object)[
+		'date' => apply_filters('valu_search_custom_fields_date', (object)[], $post),
+		'keyword' => apply_filters('valu_search_custom_fields_keyword', (object)[], $post),
+		'number' => apply_filters('valu_search_custom_fields_number', (object)[], $post),
+	];
+
 	$meta = [
 		'showInSearch'    => apply_filters( 'valu_search_show_in_search', is_archive() ? false : $public, $post ),
 		'contentSelector' => apply_filters( 'valu_search_content_selector', '', $post ),
@@ -54,7 +60,7 @@ function get_page_meta( \WP_post $post ) {
 		'modified'        => apply_filters( 'valu_search_modified', $modified, $post ),
 		'tags'            => apply_filters( 'valu_search_tags', $tags, $post ),
 		'superwords'	  => apply_filters( 'valu_search_superwords', [], $post ),
-		'preview'		  => apply_filters( 'valu_search_preview', '', $post),
+		'customFields'	  => apply_filters( 'valu_search_custom_fields', $custom_fields, $post)
 	];
 
 	// Use the post language if using polylang instead of the blog locale.
