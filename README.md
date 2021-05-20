@@ -58,6 +58,8 @@ Parameters
 -   `$title`(string) if the post being indexed is archive, the archive title otherwise the post title
 -   `$post` (WP_Post) the post of the page being indexed
 
+HTML entities in `$title` are decoded by default.
+
 ### `valu_search_created`
 
 Parameters
