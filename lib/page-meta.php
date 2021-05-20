@@ -55,7 +55,7 @@ function get_page_meta( \WP_post $post ) {
 		'showInSearch'    => apply_filters( 'valu_search_show_in_search', is_archive() ? false : $public, $post ),
 		'contentSelector' => apply_filters( 'valu_search_content_selector', '', $post ),
 		'cleanupSelector' => apply_filters( 'valu_search_cleanup_selector', '', $post ),
-		'title'           => apply_filters( 'valu_search_title', $title, $post ),
+		'title'           => apply_filters( 'valu_search_title', html_entity_decode( $title ), $post ),
 		'created'         => apply_filters( 'valu_search_created', $created, $post ),
 		'modified'        => apply_filters( 'valu_search_modified', $modified, $post ),
 		'tags'            => apply_filters( 'valu_search_tags', $tags, $post ),
