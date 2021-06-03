@@ -89,7 +89,8 @@ can be used to build custom filtering UIs.
 
 Parameters
 
--   `$custom_fields_object` ({'date': {key: value, ...}, 'keyword':{'key':'value', ...}, 'number': {'key':'value', ...}}) Object containing all custom fields objects
+-   `$custom_fields_associative_array` (array("keyword"=>[], "date"=>[], "number"=>[]);)
+    Associative array containing all custom fields associative arrays
 -   `$post` (WP_Post) the post of the page being indexed
 
 Custom fields related to the page.
@@ -98,7 +99,7 @@ Custom fields related to the page.
 
 Parameters
 
--   `$custom_fields_date_object` ({key: value, ...}) Object containing custom date field key value pairs
+-   `$custom_fields_date_associative_array` ([]) Associative_array containing custom date field key value pairs
 -   `$post` (WP_Post) the post of the page being indexed
 
 Custom date fields related to the page. e.g. eventStart, eventEnd
@@ -107,7 +108,7 @@ Custom date fields related to the page. e.g. eventStart, eventEnd
 
 Parameters
 
--   `$custom_fields_keyword_object` ({key: value, ...}) Object containing custom keyword field key value pairs
+-   `$custom_fields_keyword_associative_array` ([]) Associative_array containing custom keyword field key value pairs
 -   `$post` (WP_Post) the post of the page being indexed
 
 Custom keyword fields related to the page. e.g. productPreview, productId
@@ -116,7 +117,7 @@ Custom keyword fields related to the page. e.g. productPreview, productId
 
 Parameters
 
--   `$custom_fields_number_object` ({key: value, ...}) Object containing custom keyword field key value pairs
+-   `$custom_fields_number_associative_array` ([]) Associative_array containing custom keyword field key value pairs
 -   `$post` (WP_Post) the post of the page being indexed
 
 Custom number fields related to the page. e.g. productPrice

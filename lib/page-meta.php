@@ -45,11 +45,11 @@ function get_page_meta( \WP_post $post ) {
 	$created = get_the_date( 'c', $post );
 	$modified = get_the_modified_date( 'c', $post );
 
-	$custom_fields = (object)[
-		'date' => apply_filters('valu_search_custom_fields_date', (object)[], $post),
-		'keyword' => apply_filters('valu_search_custom_fields_keyword', (object)[], $post),
-		'number' => apply_filters('valu_search_custom_fields_number', (object)[], $post),
-	];
+	$custom_fields = [];
+	$custom_fields['date'] = apply_filters('valu_search_custom_fields_date', [], $post);
+	$custom_fields['keyword'] = apply_filters('valu_search_custom_fields_keyword', [], $post);
+	$custom_fields['number'] = apply_filters('valu_search_custom_fields_number', [], $post);
+
 
 	$meta = [
 		'showInSearch'    => apply_filters( 'valu_search_show_in_search', is_archive() ? false : $public, $post ),
