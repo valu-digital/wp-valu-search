@@ -22,6 +22,14 @@ to `wp-content/plugins`.
 
 [releases]: https://github.com/valu-digital/wp-valu-search/releases
 
+## Hacking
+
+Plugin adds a script tag to page when there is a `_vsid` query parameter in the request.
+`_vsid` query parameter value is UUID for Valu Search crawler.
+
+If you wish to test the plugin behaviour on your site after installing it, simply add `_vsid`
+query parameter, refresh page, and look for script tag with `id="valu-search"`.
+
 ## Filters
 
 ### `valu_search_content_selector`
