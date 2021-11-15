@@ -24,11 +24,9 @@ to `wp-content/plugins`.
 
 ## Hacking
 
-Plugin adds a script tag to page when there is a `_vsid` query parameter in the request.
-`_vsid` query parameter value is UUID for Valu Search crawler.
+The plugin adds a script tag to pages on your site.
 
-If you wish to test the plugin behaviour on your site after installing it, simply add `_vsid`
-query parameter, refresh page, and look for script tag with `id="valu-search"`.
+If you wish to test the plugin behaviour on your site after installing it, simply refresh page, and look for script tag with `id="valu-search"`.
 
 ## Filters
 
@@ -169,9 +167,9 @@ any.
 To enable the real time updates add provided credentials to the wp-config:
 
 ```php
-define( 'VALU_SEARCH_USERNAME', 'username' );
-define( 'VALU_SEARCH_UPDATE_API_KEY', '****' );
-define( 'VALU_SEARCH_ENABLE_LIVE_UPDATES', true );
+define("VALU_SEARCH_USERNAME", "username");
+define("VALU_SEARCH_UPDATE_API_KEY", "****");
+define("VALU_SEARCH_ENABLE_LIVE_UPDATES", true);
 ```
 
 There's a filter for controlling the update process.
@@ -214,3 +212,15 @@ Return true to enable notices about live updates in wp-admin
 Action is fired everytime live update request is done
 
 -   `$response` return type of `wp_remote_request()` (array|WP_Error)
+
+## API
+
+### `\ValuSearch\enqueue_live_update(\WP_Post $post)`
+
+Enqueues a post live update to be sent at the end of the WordPress request in
+the `shutdown` action. Can be called multiple times and the update will be
+batched.
+
+### `\ValuSearch\live_update(array $posts)`
+
+Immediately live update the given posts.

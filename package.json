@@ -1,0 +1,14 @@
+{
+  "name": "wp-valu-search",
+  "version": "1.0.0",
+  "scripts": {
+    "prettier": "prettier --write \"**.php\""
+  },
+  "dependencies": {
+    "@prettier/plugin-php": "~0.17.5",
+    "prettier": "~2.4.1"
+  },
+  "volta": {
+    "node": "14.17.6"
+  }
+}
