@@ -4,7 +4,7 @@ namespace ValuSearch;
 
 /*
 Plugin Name: Valu Search
-Version: 0.6.0
+Version: 0.6.1
 Plugin URI: https://www.valu.fi
 Description: Expose page metadata for the Search crawler
 Author: Valu Digital
@@ -66,15 +66,15 @@ function handle_post_status_transition($new_status, $old_status, $post)
         return;
     }
 
-    if (!can_live_update()) {
-        return;
-    }
-
     $enabled =
         defined('VALU_SEARCH_ENABLE_LIVE_UPDATES') &&
         VALU_SEARCH_ENABLE_LIVE_UPDATES;
 
     if (!$enabled) {
+        return;
+    }
+
+    if (!can_live_update()) {
         return;
     }
 

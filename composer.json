@@ -1,6 +1,6 @@
 {
   "name": "valu/wp-valu-search",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "WordPress plugin for Valu Search",
   "type": "wordpress-plugin",
   "license": "GPL-3.0-or-later",
