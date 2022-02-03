@@ -4,15 +4,50 @@ namespace ValuSearch;
 
 /*
 Plugin Name: Valu Search
-Version: 0.6.1
+Version: 0.7.0
 Plugin URI: https://www.valu.fi
 Description: Expose page metadata for the Search crawler
 Author: Valu Digital
 Author URI: https://github.com/valu-digital/wp-valu-search
 */
 
-if (!defined('VALU_SEARCH_ENDPOINT')) {
-    define('VALU_SEARCH_ENDPOINT', 'https://api.search.valu.pro/v1-production');
+function get_fetch_endpoint()
+{
+    if (defined('FINDKIT_FETCH_ENDPOINT')) {
+        return FINDKIT_FETCH_ENDPOINT;
+    }
+
+    return get_option('findkit_fetch_endpoint');
+}
+
+function get_live_update_endpoint() {
+    if (defined('FINDKIT_LIVE_UPDATE_ENDPOINT')) {
+        return FINDKIT_LIVE_UPDATE_ENDPOINT;
+    }
+
+    $option = get_option('findkit_live_update_endpoint');
+
+    if ($option) {
+        return $option;
+    }
+
+    $legacy_vs_endpoint = defined('VALU_SEARCH_ENDPOINT') ? VALU_SEARCH_ENDPOINT : 'https://api.search.valu.pro/v1-production';
+
+    return $legacy_vs_endpoint .  '/customers/' .  VALU_SEARCH_USERNAME .  '/update-documents';
+
+}
+
+add_action('wp_head', __NAMESPACE__ . '\\add_findkit_fetch_endpoint_to_head', 1);
+
+function add_findkit_fetch_endpoint_to_head(){
+    $endpoint = get_fetch_endpoint();
+    if (!$endpoint){
+        return;
+    }
+
+    // echo endpoint for search UI usage
+    $json = wp_json_encode( [ 'FINDKIT_FETCH_ENDPOINT' => esc_url($endpoint) ] );
+    echo '<script type="text/javascript">Object.assign(window, '.$json.')</script>';
 }
 
 function can_live_update()
@@ -200,13 +235,7 @@ function live_update(array $targets)
 
     $json = wp_json_encode(['urls' => $urls]);
 
-    $endpoint_url =
-        VALU_SEARCH_ENDPOINT .
-        '/customers/' .
-        VALU_SEARCH_USERNAME .
-        '/update-documents';
-
-    $response = wp_remote_request($endpoint_url, [
+    $response = wp_remote_request(get_live_update_endpoint(), [
         'headers' => [
             'Content-type' => 'application/json',
             'X-Valu-Search-Auth' => VALU_SEARCH_UPDATE_API_KEY,
