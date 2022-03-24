@@ -1,12 +1,11 @@
 {
     "trailingComma": "all",
     "tabWidth": 4,
+    "pluginSearchDirs": ["./"],
     "overrides": [
         {
             "files": "*.php",
             "options": {
-                "phpVersion": "7.2",
-                "trailingCommaPHP": true,
                 "singleQuote": true
             }
         }

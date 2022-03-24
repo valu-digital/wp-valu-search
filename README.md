@@ -28,6 +28,56 @@ The plugin adds a script tag to pages on your site.
 
 If you wish to test the plugin behaviour on your site after installing it, simply refresh page, and look for script tag with `id="valu-search"`.
 
+## Live Updates
+
+Live updates are sent optimistically whenever the plugin thinks the content
+might have changed on a page. The cloud backend then does a scraping request
+on the page to determine what the update actually was (add, update, delete) if
+any.
+
+To enable the real time updates add provided credentials to the wp-config:
+
+```php
+define("VALU_SEARCH_USERNAME", "username");
+define("VALU_SEARCH_API_SECRET", "****"); // Used to be called VALU_SEARCH_UPDATE_API_KEY
+define("VALU_SEARCH_ENABLE_LIVE_UPDATES", true);
+```
+
+There's a filter for controlling the update process.
+
+In the event of changing posts/pages permalink the new url gets indexed, but
+the old url remains in the index until the next full site crawl.
+
+```
+/old-url --> /new-url // new url is indexed
+```
+
+In the event that the changed page was of a hierarchical post type, only the
+updated page gets reindexed. Other pages that depend on slug of the changed page,
+eg. child pages get updated during next full crawl.
+
+```
+/old-url --> /new-url // new-url is indexed
+/old-url/sub-page --> /new-url/sub-page // new-url/sub-page is not indexed.
+```
+
+# JWT Authentication
+
+The search endpoint access can be limited using a JWT authentication. This plugin
+can automatically generate JWT tokens for the `@valu/react-valu-search` package.
+
+The token are generated only for logged in users but it can be customized with
+`valu_search_allow_search_jwt` filter.
+
+Add this to `wp-config.php` to enable it:
+
+```php
+define("VALU_SEARCH_API_SECRET", "****");
+define("VALU_SEARCH_AUTHENTICATED_SEARCH", true);
+```
+
+This feature requires [PHP-JWT](https://github.com/firebase/php-jwt) to be installed.
+
 ## Filters
 
 ### `valu_search_content_selector`
@@ -38,6 +88,19 @@ Parameters
 -   `$post` (WP_Post) the post of the page being indexed
 
 Multiple selectors can be separated by comma. Ex. `.content,.main`
+
+### `valu_search_no_highlight_content_selector`
+
+Parameters
+
+-   `$selector` (string) CSS selector for picking the content elements
+-   `$post` (WP_Post) the post of the page being indexed
+
+Multiple selectors can be separated by comma. Ex. `.content,.main`
+
+Matching html content is indexed separately from previous `valu_search_content_selector`.
+Content is not highlighted in the search ui, but behaves exactly like other content
+including being searchable and language analyzed.
 
 ### `valu_search_cleanup_selector`
 
@@ -156,39 +219,6 @@ See all available fields on <https://search.valu.pro/page-meta>
 Global options for the crawler exposed on `yoursite.example/valu-search.json`.
 
 See all available fields on <https://search.valu.pro/site-meta>
-
-# Live Updates
-
-Live updates are sent optimistically whenever the plugin thinks the content
-might have changed on a page. The cloud backend then does a scraping request
-on the page to determine what the update actually was (add, update, delete) if
-any.
-
-To enable the real time updates add provided credentials to the wp-config:
-
-```php
-define("VALU_SEARCH_USERNAME", "username");
-define("VALU_SEARCH_UPDATE_API_KEY", "****");
-define("VALU_SEARCH_ENABLE_LIVE_UPDATES", true);
-```
-
-There's a filter for controlling the update process.
-
-In the event of changing posts/pages permalink the new url gets indexed, but
-the old url remains in the index until the next full site crawl.
-
-```
-/old-url --> /new-url // new url is reindexed
-```
-
-In the event that the changed page was of a hierarchical post type, only the
-updated page gets reindexed. Other pages that depend on slug of the changed page,
-eg. child pages get updated during next crawl.
-
-```
-/old-url --> /new-url // new-url is reindexed
-/old-url/sub-page --> /new-url/sub-page // new-url/sub-page is not reindexed.
-```
 
 ### `valu_search_should_update`
 

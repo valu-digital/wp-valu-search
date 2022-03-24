@@ -20,7 +20,8 @@ function get_fetch_endpoint()
     return get_option('findkit_fetch_endpoint');
 }
 
-function get_live_update_endpoint() {
+function get_live_update_endpoint()
+{
     if (defined('FINDKIT_LIVE_UPDATE_ENDPOINT')) {
         return FINDKIT_LIVE_UPDATE_ENDPOINT;
     }
@@ -31,23 +32,34 @@ function get_live_update_endpoint() {
         return $option;
     }
 
-    $legacy_vs_endpoint = defined('VALU_SEARCH_ENDPOINT') ? VALU_SEARCH_ENDPOINT : 'https://api.search.valu.pro/v1-production';
+    $legacy_vs_endpoint = defined('VALU_SEARCH_ENDPOINT')
+        ? VALU_SEARCH_ENDPOINT
+        : 'https://api.search.valu.pro/v1-production';
 
-    return $legacy_vs_endpoint .  '/customers/' .  VALU_SEARCH_USERNAME .  '/update-documents';
-
+    return $legacy_vs_endpoint .
+        '/customers/' .
+        VALU_SEARCH_USERNAME .
+        '/update-documents';
 }
 
-add_action('wp_head', __NAMESPACE__ . '\\add_findkit_fetch_endpoint_to_head', 1);
+add_action(
+    'wp_head',
+    __NAMESPACE__ . '\\add_findkit_fetch_endpoint_to_head',
+    1
+);
 
-function add_findkit_fetch_endpoint_to_head(){
+function add_findkit_fetch_endpoint_to_head()
+{
     $endpoint = get_fetch_endpoint();
-    if (!$endpoint){
+    if (!$endpoint) {
         return;
     }
 
     // echo endpoint for search UI usage
-    $json = wp_json_encode( [ 'FINDKIT_FETCH_ENDPOINT' => esc_url($endpoint) ] );
-    echo '<script type="text/javascript">Object.assign(window, '.$json.')</script>';
+    $json = wp_json_encode(['FINDKIT_FETCH_ENDPOINT' => esc_url($endpoint)]);
+    echo '<script type="text/javascript">Object.assign(window, ' .
+        $json .
+        ')</script>';
 }
 
 function can_live_update()
@@ -59,14 +71,27 @@ function can_live_update()
         return false;
     }
 
-    if (!defined('VALU_SEARCH_UPDATE_API_KEY')) {
+    if (!get_api_secret()) {
         error_log(
-            'Valu Search - Cannot enable live updates:  VALU_SEARCH_UPDATE_API_KEY missing'
+            'Valu Search - Cannot enable live updates:  FINDKIT_API_SECRET missing'
         );
         return false;
     }
 
     return true;
+}
+
+function get_api_secret()
+{
+    if (defined('VALU_SEARCH_API_SECRET')) {
+        return VALU_SEARCH_API_SECRET;
+    }
+
+    if (defined('VALU_SEARCH_UPDATE_API_KEY')) {
+        return VALU_SEARCH_UPDATE_API_KEY;
+    }
+
+    return null;
 }
 
 function get_blog_info_array()
@@ -88,6 +113,7 @@ function get_blog_info_array()
 require_once __DIR__ . '/lib/flash-message.php';
 require_once __DIR__ . '/lib/page-meta.php';
 require_once __DIR__ . '/lib/site-meta.php';
+require_once __DIR__ . '/lib/JwtAuth.php';
 
 function can_see_status_messages()
 {
@@ -238,7 +264,7 @@ function live_update(array $targets)
     $response = wp_remote_request(get_live_update_endpoint(), [
         'headers' => [
             'Content-type' => 'application/json',
-            'X-Valu-Search-Auth' => VALU_SEARCH_UPDATE_API_KEY,
+            'X-Valu-Search-Auth' => get_api_secret(),
         ],
         'method' => 'POST',
         'body' => $json,
@@ -327,3 +353,5 @@ function error_message($error)
 	</div>
 	<?php
 }
+
+new JwtAuth();

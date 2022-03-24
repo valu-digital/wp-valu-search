@@ -87,6 +87,11 @@ function get_page_meta(\WP_post $post)
             '',
             $post
         ),
+        'contentNoHighlightSelector' => apply_filters(
+            'valu_search_no_highlight_content_selector',
+            '',
+            $post
+        ),
         'cleanupSelector' => apply_filters(
             'valu_search_cleanup_selector',
             '',
