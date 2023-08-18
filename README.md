@@ -1,4 +1,4 @@
-🚨 This plugin has been depracated. Please move the to Findkit plugin as soon as possible.
+🚨 This plugin has been deprecated. Please move the to Findkit plugin as soon as possible.
 
 <https://github.com/findkit/wp-findkit>
 
