@@ -1,3 +1,8 @@
+🚨 This plugin has been depracated. Please move the to Findkit plugin as soon as possible.
+
+<https://github.com/findkit/wp-findkit>
+
+
 # Valu Search for WordPress
 
 WordPress plugin for [Valu Search](https://search.valu.pro).
